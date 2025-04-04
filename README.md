@@ -1,2 +1,0 @@
-# LinkEstudiantil
-Proyecto de Titulo 
