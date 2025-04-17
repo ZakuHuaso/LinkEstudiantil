@@ -5,6 +5,7 @@ import { supabase } from "../lib/supabaseClient"
 export default function Login() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [tipoUsuario, setTipoUsuario] = useState("") // nuevo estado
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
@@ -14,17 +15,30 @@ export default function Login() {
     setError("")
     setLoading(true)
 
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+    if (!tipoUsuario) {
+      setError("Debes seleccionar un tipo de usuario.")
+      setLoading(false)
+      return
+    }
 
-    if (error) {
+    const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password })
+
+    if (authError || !data.user) {
       setError("Correo o contraseña incorrectos")
       setLoading(false)
       return
     }
 
+    // Determinar tabla a consultar según tipo de usuario
+    const tabla = tipoUsuario === "estudiante"
+      ? "alumnos"
+      : tipoUsuario === "consejero"
+      ? "consejeros"
+      : "coordinadores"
+
     const { data: perfil, error: perfilError } = await supabase
-      .from("usuarios")
-      .select("rol")
+      .from(tabla)
+      .select("*")
       .eq("id", data.user.id)
       .single()
 
@@ -34,20 +48,7 @@ export default function Login() {
       return
     }
 
-    switch (perfil.rol) {
-      case "estudiante":
-        navigate("/estudiante")
-        break
-      case "consejero":
-        navigate("/consejero")
-        break
-      case "coordinador":
-        navigate("/coordinador")
-        break
-      default:
-        setError("Rol no válido.")
-    }
-
+    navigate(`/${tipoUsuario}`)
     setLoading(false)
   }
 
@@ -59,6 +60,37 @@ export default function Login() {
           <h2 className="text-2xl font-bold mb-6 text-black text-center">Welcome back</h2>
 
           {error && <p className="text-red-500 text-sm mb-4 text-center">{error}</p>}
+
+          <label className="block mb-1 text-sm font-medium text-gray-700">Tipo de usuario</label>
+          <div className="flex gap-4 mb-4">
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="radio"
+                name="tipo"
+                value="estudiante"
+                onChange={(e) => setTipoUsuario(e.target.value)}
+              />
+              Estudiante
+            </label>
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="radio"
+                name="tipo"
+                value="consejero"
+                onChange={(e) => setTipoUsuario(e.target.value)}
+              />
+              Consejero
+            </label>
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="radio"
+                name="tipo"
+                value="coordinador"
+                onChange={(e) => setTipoUsuario(e.target.value)}
+              />
+              Coordinador
+            </label>
+          </div>
 
           <label className="block mb-1 text-sm font-medium text-gray-700">Email address</label>
           <input
@@ -88,12 +120,10 @@ export default function Login() {
             {loading ? "Entrando..." : "Entrar"}
           </button>
 
-          
-
-          <p className="text-sm text-center">
-            Don’t have an account?{" "}
+          <p className="text-sm text-center mt-4">
+            ¿No tienes cuenta?{" "}
             <a href="/registro" className="text-blue-600 font-semibold hover:underline">
-              Sign Up
+              Regístrate
             </a>
           </p>
         </form>

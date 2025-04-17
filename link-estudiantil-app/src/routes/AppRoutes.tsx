@@ -5,6 +5,7 @@ import Estudiante from "../pages/Estudiante"
 import Consejero from "../pages/Consejero"
 import Coordinador from "../pages/Coordinador"
 import Home from "../pages/Home"
+import EnviarRequerimiento from "../pages/EnviarRequerimiento"
 import ProtectedRoute from "../components/ProtectedRoute"
 
 export default function AppRoutes() {
@@ -14,6 +15,7 @@ export default function AppRoutes() {
         <Route path="/" element={<Login />} />
         <Route path="/home" element={<Home />} />
         <Route path="/registro" element={<Register />} />
+        <Route path="/requerimiento" element={<EnviarRequerimiento />} />
 
         <Route
           path="/estudiante"

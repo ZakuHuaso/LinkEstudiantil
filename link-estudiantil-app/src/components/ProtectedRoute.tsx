@@ -4,7 +4,7 @@ import { supabase } from "../lib/supabaseClient"
 
 type Props = {
   children: React.ReactNode
-  allowedRoles: string[]
+  allowedRoles: string[] // valores: "estudiante", "consejero", "coordinador"
 }
 
 export default function ProtectedRoute({ children, allowedRoles }: Props) {
@@ -24,16 +24,32 @@ export default function ProtectedRoute({ children, allowedRoles }: Props) {
         return
       }
 
-      const { data: perfil, error: perfilError } = await supabase
-        .from("usuarios")
-        .select("rol")
-        .eq("id", user.id)
-        .single()
+      let rol = null
 
-      if (perfilError || !perfil) {
-        setAuthorized(false)
+      // Buscar al usuario en cada tabla
+      const tablas = [
+        { nombre: "alumnos", rol: "estudiante" },
+        { nombre: "consejeros", rol: "consejero" },
+        { nombre: "coordinadores", rol: "coordinador" },
+      ]
+
+      for (const t of tablas) {
+        const { data, error } = await supabase
+          .from(t.nombre)
+          .select("id")
+          .eq("id", user.id)
+          .single()
+
+        if (data && !error) {
+          rol = t.rol
+          break
+        }
+      }
+
+      if (rol && allowedRoles.includes(rol)) {
+        setAuthorized(true)
       } else {
-        setAuthorized(allowedRoles.includes(perfil.rol))
+        setAuthorized(false)
       }
 
       setLoading(false)
