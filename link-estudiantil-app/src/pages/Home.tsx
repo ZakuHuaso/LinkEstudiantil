@@ -9,7 +9,7 @@ export default function Home() {
   useEffect(() => {
     const fetchActividades = async () => {
       const { data, error } = await supabase
-        .from("actividades")
+        .from("Actividades")
         .select("*")
         .eq("estado", "aprobada")
         .eq("publicar_en_home", true)
