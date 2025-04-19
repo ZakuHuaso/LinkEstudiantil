@@ -4,7 +4,13 @@ import { useNavigate } from "react-router-dom"
 
 export default function Home() {
   const [actividades, setActividades] = useState<any[]>([])
+  const [showMenu, setShowMenu] = useState(false)
   const navigate = useNavigate()
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    navigate("/")
+  }
 
   useEffect(() => {
     const fetchActividades = async () => {
@@ -27,12 +33,57 @@ export default function Home() {
       {/* Navbar */}
       <nav className="bg-blue-900 text-white py-4 px-6 flex justify-between items-center">
         <h1 className="text-lg font-semibold">Plataforma DUOC UC</h1>
-        <div className="flex items-center gap-4">
-          <button onClick={() => navigate("/")} className="hover:underline">Inicio</button>
+        <div className="flex items-center gap-4 relative">
+          <button onClick={() => navigate("/home")} className="hover:underline">Inicio</button>
           <button onClick={() => navigate("/eventos")} className="hover:underline">Actividades</button>
-          <button onClick={() => navigate("/propuestas")} className="hover:underline">Propuestas</button>
+          
           <button onClick={() => navigate("/requerimiento")} className="hover:underline">Enviar Requerimiento</button>
-          <img src="/avatar.png" alt="Avatar" className="w-8 h-8 rounded-full" />
+          
+          {/* Avatar con menú desplegable */}
+          <img
+            src="/avatar.png"
+            alt="Avatar"
+            className="w-8 h-8 rounded-full cursor-pointer"
+            onClick={() => setShowMenu(!showMenu)}
+          />
+          {showMenu && (
+            <div className="absolute right-0 top-12 w-52 bg-white border rounded shadow text-black z-50">
+              <button
+                className="block w-full px-4 py-2 text-left hover:bg-gray-100"
+                onClick={() => {
+                  setShowMenu(false)
+                  navigate("/perfil")
+                }}
+              >
+                Ir a mi perfil
+              </button>
+              <button
+                className="block w-full px-4 py-2 text-left hover:bg-gray-100"
+                onClick={() => {
+                  setShowMenu(false)
+                  navigate("/mis-requerimientos")
+                }}
+              >
+                Ver mis requerimientos
+              </button>
+              <button
+                className="block w-full px-4 py-2 text-left hover:bg-gray-100"
+                onClick={() => {
+                  setShowMenu(false)
+                  navigate("/mis-eventos")
+                }}
+              >
+                Inscripciones
+              </button>
+              <hr />
+              <button
+                className="block w-full px-4 py-2 text-left text-red-600 hover:bg-red-100"
+                onClick={handleLogout}
+              >
+                Cerrar sesión
+              </button>
+            </div>
+          )}
         </div>
       </nav>
 
@@ -54,7 +105,7 @@ export default function Home() {
         {[
           { titulo: "Actividades", desc: "Participa en eventos aprobados", icon: "🌟", link: "/eventos" },
           { titulo: "Fondos", desc: "Conoce las iniciativas apoyadas", icon: "💰", link: "/fondos" },
-          { titulo: "Propuestas", desc: "Envía tus ideas a tu consejero", icon: "📝", link: "/propuestas" },
+          { titulo: "Propuestas", desc: "Envía tus ideas a tu consejero", icon: "📝", link: "/requerimiento" },
           { titulo: "Inscripciones", desc: "Gestiona tus actividades inscritas", icon: "✅", link: "/mis-eventos" },
         ].map((item, i) => (
           <div key={i} onClick={() => navigate(item.link)} className="bg-blue-100 hover:bg-blue-200 p-6 rounded-lg shadow cursor-pointer">
@@ -71,7 +122,11 @@ export default function Home() {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {actividades.length > 0 ? (
             actividades.map((a) => (
-              <div key={a.id} className="bg-white shadow-md rounded-lg p-4">
+              <div
+                key={a.id}
+                onClick={() => navigate(`/actividad/${a.id}`)}
+                className="bg-white shadow-md rounded-lg p-4 hover:bg-gray-50 cursor-pointer transition"
+              >
                 <h3 className="text-lg font-semibold text-blue-800 mb-1">{a.titulo}</h3>
                 <p className="text-sm text-gray-600 mb-2">{a.descripcion}</p>
                 <p className="text-sm text-gray-500">Fecha: {a.fecha}</p>

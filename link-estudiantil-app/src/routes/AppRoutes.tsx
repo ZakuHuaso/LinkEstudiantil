@@ -6,6 +6,10 @@ import Consejero from "../pages/Consejero"
 import Coordinador from "../pages/Coordinador"
 import Home from "../pages/Home"
 import EnviarRequerimiento from "../pages/EnviarRequerimiento"
+import ActividadDetalle from "../pages/ActividadDetalle"
+import Actividades from "../pages/Actividades"
+import MisInscripciones from "../pages/MisInscripciones"
+
 import ProtectedRoute from "../components/ProtectedRoute"
 
 export default function AppRoutes() {
@@ -16,6 +20,10 @@ export default function AppRoutes() {
         <Route path="/home" element={<Home />} />
         <Route path="/registro" element={<Register />} />
         <Route path="/requerimiento" element={<EnviarRequerimiento />} />
+        <Route path="/actividad/:id" element={<ActividadDetalle />} />
+        <Route path="/eventos" element={<Actividades />} />
+        <Route path="/mis-eventos" element={<MisInscripciones />} />
+
 
         <Route
           path="/estudiante"
