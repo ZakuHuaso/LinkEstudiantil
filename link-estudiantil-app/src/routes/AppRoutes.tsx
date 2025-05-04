@@ -9,6 +9,7 @@ import EnviarRequerimiento from "../pages/EnviarRequerimiento"
 import ActividadDetalle from "../pages/ActividadDetalle"
 import Actividades from "../pages/Actividades"
 import MisInscripciones from "../pages/MisInscripciones"
+import RequerimientosRecibidos from "../pages/RequerimientosRecibidos"
 
 import ProtectedRoute from "../components/ProtectedRoute"
 
@@ -23,7 +24,9 @@ export default function AppRoutes() {
         <Route path="/actividad/:id" element={<ActividadDetalle />} />
         <Route path="/eventos" element={<Actividades />} />
         <Route path="/mis-eventos" element={<MisInscripciones />} />
-
+        <Route path="/requerimientos-recibidos" element={<RequerimientosRecibidos />} />
+        
+        
 
         <Route
           path="/estudiante"

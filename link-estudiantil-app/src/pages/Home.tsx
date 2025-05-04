@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { supabase } from "../lib/supabaseClient"
 import { useNavigate } from "react-router-dom"
+import Navbar from "../components/Navbar"
 
 export default function Home() {
   const [actividades, setActividades] = useState<any[]>([])
@@ -31,61 +32,7 @@ export default function Home() {
   return (
     <div className="bg-white min-h-screen font-sans">
       {/* Navbar */}
-      <nav className="bg-blue-900 text-white py-4 px-6 flex justify-between items-center">
-        <h1 className="text-lg font-semibold">Plataforma DUOC UC</h1>
-        <div className="flex items-center gap-4 relative">
-          <button onClick={() => navigate("/home")} className="hover:underline">Inicio</button>
-          <button onClick={() => navigate("/eventos")} className="hover:underline">Actividades</button>
-          
-          <button onClick={() => navigate("/requerimiento")} className="hover:underline">Enviar Requerimiento</button>
-          
-          {/* Avatar con menú desplegable */}
-          <img
-            src="/avatar.png"
-            alt="Avatar"
-            className="w-8 h-8 rounded-full cursor-pointer"
-            onClick={() => setShowMenu(!showMenu)}
-          />
-          {showMenu && (
-            <div className="absolute right-0 top-12 w-52 bg-white border rounded shadow text-black z-50">
-              <button
-                className="block w-full px-4 py-2 text-left hover:bg-gray-100"
-                onClick={() => {
-                  setShowMenu(false)
-                  navigate("/perfil")
-                }}
-              >
-                Ir a mi perfil
-              </button>
-              <button
-                className="block w-full px-4 py-2 text-left hover:bg-gray-100"
-                onClick={() => {
-                  setShowMenu(false)
-                  navigate("/mis-requerimientos")
-                }}
-              >
-                Ver mis requerimientos
-              </button>
-              <button
-                className="block w-full px-4 py-2 text-left hover:bg-gray-100"
-                onClick={() => {
-                  setShowMenu(false)
-                  navigate("/mis-eventos")
-                }}
-              >
-                Inscripciones
-              </button>
-              <hr />
-              <button
-                className="block w-full px-4 py-2 text-left text-red-600 hover:bg-red-100"
-                onClick={handleLogout}
-              >
-                Cerrar sesión
-              </button>
-            </div>
-          )}
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero principal */}
       <header className="relative bg-cover bg-center h-[500px]" style={{ backgroundImage: `url('/banner.jpg')` }}>

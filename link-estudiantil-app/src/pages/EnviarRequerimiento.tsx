@@ -80,13 +80,14 @@ export default function EnviarRequerimiento() {
       imagenUrl = publicUrl.publicUrl
     }
 
-    const { error: insertError } = await supabase.from("Requerimientos").insert([
+    const { error: insertError } = await supabase.from("requerimientos").insert([
       {
         alumno_id: user.id,
         tipo,
         descripcion,
         imagen_url: imagenUrl,
         consejero_id: consejero.id,
+        fecha_envio: new Date().toISOString() 
       },
     ])
 
