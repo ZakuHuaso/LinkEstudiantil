@@ -35,7 +35,7 @@ export default function Home() {
       <Navbar />
 
       {/* Hero principal */}
-      <header className="relative bg-cover bg-center h-[500px]" style={{ backgroundImage: `url('/banner.jpg')` }}>
+      <header className="relative bg-cover bg-center h-[500px]" style={{ backgroundImage: `url('/home.png')` }}>
         <div className="bg-black/60 w-full h-full flex items-center justify-center">
           <div className="text-center text-white px-4">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Conecta con tu Carrera</h1>

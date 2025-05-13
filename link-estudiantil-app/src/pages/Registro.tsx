@@ -15,41 +15,29 @@ export default function Registro() {
     e.preventDefault();
     setError("");
     setMensaje("");
-
+  
     if (!correo.endsWith("@duocuc.cl")) {
       setError("Solo se permiten correos @duocuc.cl");
       return;
     }
-
-    const { data, error: signUpError } = await supabase.auth.signUp({
+  
+    const { error: signUpError } = await supabase.auth.signUp({
       email: correo,
       password,
+      options: {
+        data: {
+          nombre,
+          carrera,
+        }
+      }
     });
-
+  
     if (signUpError) {
-      setError("Error al crear cuenta.");
+      setError("Error al crear cuenta: " + signUpError.message);
       return;
     }
-
-    // ✅ Guardar en la tabla alumnos después del signup
-    const userId = data.user?.id;
-    if (userId) {
-      const { error: insertError } = await supabase.from("alumnos").insert([
-        {
-          id: userId,
-          nombre,
-          correo,
-          carrera,
-        },
-      ]);
-
-      if (insertError) {
-        setError("Usuario creado pero falló al insertar en alumnos.");
-        return;
-      }
-
-      setMensaje("Registro exitoso. Confirma tu correo y luego inicia sesión.");
-    }
+  
+    setMensaje("Registro exitoso. Por favor confirma tu correo electrónico para completar el registro.");
   };
 
   return (

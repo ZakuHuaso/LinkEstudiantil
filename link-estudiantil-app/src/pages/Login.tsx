@@ -59,7 +59,7 @@ export default function Login() {
       return;
     }
 
-    navigate(`/${tipoUsuario}`);
+    navigate(`/home`);
     setLoading(false);
   };
 
