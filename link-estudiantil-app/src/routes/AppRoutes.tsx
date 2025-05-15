@@ -26,7 +26,7 @@ export default function AppRoutes() {
         <Route path="/eventos" element={<Actividades />} />
         <Route path="/mis-eventos" element={<MisInscripciones />} />
         <Route path="/requerimientos-recibidos" element={<RequerimientosRecibidos />} />
-        <Route path="/requerimientos-recibidos" element={<RequerimientosRecibidos />} />
+       
         
         
 
