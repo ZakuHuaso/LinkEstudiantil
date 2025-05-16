@@ -10,7 +10,7 @@ import MisInscripciones from "../pages/MisInscripciones"
 import RequerimientosRecibidos from "../pages/RequerimientosRecibidos"
 
 
-import ProtectedRoute from "../components/ProtectedRoute"
+
 
 export default function AppRoutes() {
   return (
