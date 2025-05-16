@@ -1,9 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Login from "../pages/Login"
 import Register from "../pages/Registro"
-import Estudiante from "../pages/Estudiante"
-import Consejero from "../pages/Consejero"
-import Coordinador from "../pages/Coordinador"
+
 import Home from "../pages/Home"
 import EnviarRequerimiento from "../pages/EnviarRequerimiento"
 import ActividadDetalle from "../pages/ActividadDetalle"
@@ -27,33 +25,6 @@ export default function AppRoutes() {
         <Route path="/mis-eventos" element={<MisInscripciones />} />
         <Route path="/requerimientos-recibidos" element={<RequerimientosRecibidos />} />
        
-        
-        
-
-        <Route
-          path="/estudiante"
-          element={
-            <ProtectedRoute allowedRoles={["estudiante"]}>
-              <Estudiante />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/consejero"
-          element={
-            <ProtectedRoute allowedRoles={["consejero"]}>
-              <Consejero />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/coordinador"
-          element={
-            <ProtectedRoute allowedRoles={["coordinador"]}>
-              <Coordinador />
-            </ProtectedRoute>
-          }
-        />
       </Routes>
     </BrowserRouter>
   )
