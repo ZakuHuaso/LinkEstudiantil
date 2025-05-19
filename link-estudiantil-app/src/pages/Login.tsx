@@ -39,39 +39,53 @@ export default function Login() {
     }
 
     // Intento autenticar al usuario con su email y contraseña usando Supabase
-    const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password });
+const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password });
 
-    // Si hay un error o no se obtuvo el usuario, muestro mensaje de error
-    if (authError || !data.user) {
-      setError("Correo o contraseña incorrectos");
-      setLoading(false);
-      return;
-    }
+if (authError || !data.user) {
+  setError("Correo o contraseña incorrectos");
+  setLoading(false);
+  return;
+}
 
-    // Según el tipo de usuario, defino a qué tabla consultar en Supabase
-    const tabla = tipoUsuario === "estudiante"
-      ? "alumnos"
-      : tipoUsuario === "consejero"
-      ? "consejeros"
-      : "coordinadores";
+if (tipoUsuario === "estudiante") {
+  const { data: alumnoExistente } = await supabase
+    .from("alumnos")
+    .select("id")
+    .eq("id", data.user.id)
+    .single();
 
-    // Hago una consulta a la tabla correspondiente para obtener el perfil del usuario
-    const { data: perfil, error: perfilError } = await supabase
-      .from(tabla)
-      .select("*")
-      .eq("id", data.user.id)
-      .single();
+  if (!alumnoExistente) {
+    await supabase.from("alumnos").insert({
+      id: data.user.id,
+      correo: data.user.email,
+      nombre: data.user.user_metadata?.nombre || "Sin nombre",
+      carrera: data.user.user_metadata?.carrera || "Sin carrera"
+    });
+  }
+}
 
-    // Si no encuentro el perfil, muestro error
-    if (!perfil || perfilError) {
-      setError("No se encontró el perfil del usuario.");
-      setLoading(false);
-      return;
-    }
 
-    // Si todo está correcto, redirijo al home
-    navigate(`/home`);
-    setLoading(false);
+// Continúo con la consulta del perfil para validación adicional
+const tabla = tipoUsuario === "estudiante"
+  ? "alumnos"
+  : tipoUsuario === "consejero"
+  ? "consejeros"
+  : "coordinadores";
+
+const { data: perfil, error: perfilError } = await supabase
+  .from(tabla)
+  .select("*")
+  .eq("id", data.user.id)
+  .single();
+
+if (!perfil || perfilError) {
+  setError("No se encontró el perfil del usuario.");
+  setLoading(false);
+  return;
+}
+
+navigate(`/home`);
+setLoading(false);
   };
 
   return (
