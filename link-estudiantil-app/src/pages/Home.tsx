@@ -2,6 +2,9 @@ import { useEffect, useState } from "react"
 import { supabase } from "../lib/supabaseClient"
 import { useNavigate } from "react-router-dom"
 import Navbar from "../components/Navbar"
+import { useLocation } from "react-router-dom";
+
+
 
 export default function Home() {
   const [actividades, setActividades] = useState<any[]>([])
