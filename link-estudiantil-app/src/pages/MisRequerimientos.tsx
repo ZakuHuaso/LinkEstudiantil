@@ -6,7 +6,9 @@ type Requerimiento = {
   tipo: string;
   descripcion: string;
   fecha_envio: string;
-  imagen_url: string;
+  imagen_url?: string;
+  estado: string;
+  respuesta?: string;
 };
 
 export default function MisRequerimientos() {
@@ -20,8 +22,9 @@ export default function MisRequerimientos() {
 
       const { data, error: reqError } = await supabase
         .from("requerimientos")
-        .select("id, tipo, descripcion, fecha_envio, imagen_url")
-        .eq("alumno_id", user.id);
+        .select("id, tipo, descripcion, fecha_envio, imagen_url, estado, respuesta")
+        .eq("alumno_id", user.id)
+        .order("fecha_envio", { ascending: false });
 
       if (!reqError && data) {
         setRequerimientos(data);
@@ -44,6 +47,8 @@ export default function MisRequerimientos() {
               <th className="px-4 py-2">Tipo</th>
               <th className="px-4 py-2">Descripción</th>
               <th className="px-4 py-2">Fecha</th>
+              <th className="px-4 py-2">Estado</th>
+              <th className="px-4 py-2">Respuesta</th>
               <th className="px-4 py-2">Imagen</th>
             </tr>
           </thead>
@@ -55,10 +60,30 @@ export default function MisRequerimientos() {
                   <td className="px-4 py-2">{r.descripcion}</td>
                   <td className="px-4 py-2">{new Date(r.fecha_envio).toLocaleDateString()}</td>
                   <td className="px-4 py-2">
+                    <span
+                      className={`px-2 py-1 rounded-full text-sm
+                        ${r.estado === 'respondido' || r.estado === 'aceptado'
+                          ? 'bg-green-100 text-green-800'
+                          : r.estado === 'denegado'
+                          ? 'bg-red-100 text-red-800'
+                          : 'bg-yellow-100 text-yellow-800'}`
+                      }
+                    >
+                      {r.estado.toUpperCase()}
+                    </span>
+                  </td>
+                  <td className="px-4 py-2">
+                    {r.respuesta ? (
+                      <p className="text-sm text-gray-700">{r.respuesta}</p>
+                    ) : (
+                      <span className="text-xs text-gray-500">—</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-2">
                     {r.imagen_url ? (
                       <button
                         className="text-blue-600 underline hover:text-blue-800"
-                        onClick={() => setImagenSeleccionada(r.imagen_url)}
+                        onClick={() => setImagenSeleccionada(r.imagen_url!)}
                       >
                         Ver
                       </button>
@@ -70,7 +95,7 @@ export default function MisRequerimientos() {
               ))
             ) : (
               <tr>
-                <td colSpan={4} className="text-center py-4 text-gray-500">
+                <td colSpan={6} className="text-center py-4 text-gray-500">
                   No has enviado requerimientos.
                 </td>
               </tr>

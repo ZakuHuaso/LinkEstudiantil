@@ -5,6 +5,7 @@ import { supabase } from "../lib/supabaseClient"
 export default function Navbar() {
   const [rol, setRol] = useState<string | null>(null)
   const [showMenu, setShowMenu] = useState(false)
+  const [notificaciones, setNotificaciones] = useState<number>(0)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -30,9 +31,22 @@ export default function Navbar() {
         }
       }
     }
-
     fetchRol()
   }, [])
+
+  useEffect(() => {
+    const fetchNotificaciones = async () => {
+      const userId = (await supabase.auth.getUser()).data.user?.id
+      if (!userId) return
+      const { data, error } = await supabase
+        .from("notificaciones")
+        .select("id")
+        .eq("receptor_id", userId)
+        .eq("leido", false)
+      if (!error && data) setNotificaciones(data.length)
+    }
+    fetchNotificaciones()
+  }, [rol])
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
@@ -42,15 +56,14 @@ export default function Navbar() {
   const botones = {
     estudiante: [
       { label: "Inicio", path: "/home" },
-      { label: "Ver Actividades", path: "/eventos" },
-      { label: "Enviar Requerimiento", path: "/requerimiento" },
-      { label: "Mis Inscripciones", path: "/mis-eventos" },
+      { label: `Notificaciones (${notificaciones})`, path: "/notificaciones" },
     ],
     consejero: [
       { label: "Inicio", path: "/consejero" },
       { label: "Requerimientos Recibidos", path: "/requerimientos-recibidos" },
       { label: "Crear Propuesta", path: "/crear-propuesta" },
       { label: "Mis Propuestas", path: "/mis-propuestas" },
+      { label: `Notificaciones (${notificaciones})`, path: "/notificaciones" },
     ],
     coordinador: [
       { label: "Inicio", path: "/coordinador" },
@@ -58,19 +71,25 @@ export default function Navbar() {
       { label: "Aprobar Propuestas", path: "/aprobar-propuestas" },
       { label: "Crear Actividad", path: "/crear-actividad" },
       { label: "Consejeros y Actividades", path: "/listar-consejeros" },
+      { label: `Notificaciones (${notificaciones})`, path: "/notificaciones" },
     ],
   }
 
   return (
     <nav className="bg-blue-900 text-white py-4 px-6 flex justify-between items-center">
-      <h1 className="text-lg font-semibold">Plataforma DUOC UC</h1>
+      <h1 className="text-lg font-semibold">Link Estudiantil DUOC UC</h1>
       <div className="flex items-center gap-4 relative">
         {rol && botones[rol as keyof typeof botones].map((btn, i) => (
-          <button key={i} onClick={() => navigate(btn.path)} className="hover:underline">
+          <button
+            key={i}
+            onClick={() => navigate(btn.path)}
+            className="hover:underline"
+          >
             {btn.label}
           </button>
         ))}
 
+        {/* Menú desplegable */}
         <img
           src="/avatar.png"
           alt="Avatar"
@@ -79,11 +98,17 @@ export default function Navbar() {
         />
         {showMenu && (
           <div className="absolute right-0 top-12 w-48 bg-white border rounded shadow text-black z-50">
-            <button className="w-full px-4 py-2 text-left hover:bg-gray-100" onClick={() => navigate("/perfil")}>
+            <button
+              className="w-full px-4 py-2 text-left hover:bg-gray-100"
+              onClick={() => navigate("/perfil")}
+            >
               Perfil
             </button>
             <hr />
-            <button className="w-full px-4 py-2 text-left text-red-600 hover:bg-red-100" onClick={handleLogout}>
+            <button
+              className="w-full px-4 py-2 text-left text-red-600 hover:bg-red-100"
+              onClick={handleLogout}
+            >
               Cerrar Sesión
             </button>
           </div>
