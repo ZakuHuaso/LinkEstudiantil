@@ -9,7 +9,7 @@ import Actividades from "../pages/Actividades"
 import MisInscripciones from "../pages/MisInscripciones"
 import RequerimientosRecibidos from "../pages/RequerimientosRecibidos"
 import Notificaciones from "../pages/Notificaciones"
-import MisRequerimientos from "../pages/MisRequerimientos"
+
 
 
 export default function AppRoutes() {
@@ -25,7 +25,7 @@ export default function AppRoutes() {
         <Route path="/mis-eventos" element={<MisInscripciones />} />
         <Route path="/requerimientos-recibidos" element={<RequerimientosRecibidos />} />
         <Route path="/notificaciones" element={<Notificaciones />} />
-        <Route path="/mis-requerimientos" element={<MisRequerimientos />} />
+        
       </Routes>
     </BrowserRouter>
   )

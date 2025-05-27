@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function RegistroAlumno() {
   const [nombre, setNombre] = useState("");
   const [correo, setCorreo] = useState("");
   const [password, setPassword] = useState("");
-  const [escuelas, setEscuelas] = useState([]);
-  const [carreras, setCarreras] = useState([]);
-  const [escuelaSeleccionada, setEscuelaSeleccionada] = useState("");
-  const [carreraSeleccionada, setCarreraSeleccionada] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [escuelas, setEscuelas] = useState<any[]>([]);
+  const [carreras, setCarreras] = useState<any[]>([]);
+  const [escuelaSeleccionada, setEscuelaSeleccionada] = useState("" as string);
+  const [carreraSeleccionada, setCarreraSeleccionada] = useState("" as string);
   const [error, setError] = useState("");
   const [mensaje, setMensaje] = useState("");
 
@@ -61,17 +63,7 @@ export default function RegistroAlumno() {
       return;
     }
 
-    // Depuración
-    console.log("Enviando registro con:", {
-      email: correo,
-      password,
-      options: {
-        data: {
-          nombre,
-          carrera_id: carreraSeleccionada,
-        },
-      },
-    });
+    console.log("Enviando registro con:", { email: correo, password, options: { data: { nombre, carrera_id: carreraSeleccionada } } });
 
     const { error: signUpError } = await supabase.auth.signUp({
       email: correo,
@@ -90,8 +82,7 @@ export default function RegistroAlumno() {
     }
 
     setMensaje("Registro exitoso. Revisa tu correo para confirmar la cuenta.");
-      navigate("/", { state: { registrado: true } });
-
+    navigate("/", { state: { registrado: true } });
   };
 
   return (
@@ -114,8 +105,8 @@ export default function RegistroAlumno() {
 
           <label className="block mb-1 text-sm font-medium text-gray-700">Correo DUOC</label>
           <input
-            className="w-full p-3 mb-4 border border-gray-300 rounded"
             type="email"
+            className="w-full p-3 mb-4 border border-gray-300 rounded"
             value={correo}
             onChange={(e) => setCorreo(e.target.value)}
             placeholder="ejemplo@duocuc.cl"
@@ -123,13 +114,22 @@ export default function RegistroAlumno() {
           />
 
           <label className="block mb-1 text-sm font-medium text-gray-700">Contraseña</label>
-          <input
-            className="w-full p-3 mb-4 border border-gray-300 rounded"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div className="relative mb-4">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              className="w-full p-3 border border-gray-300 rounded pr-10"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((s) => !s)}
+              className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
 
           <label className="block mb-1 text-sm font-medium text-gray-700">Escuela</label>
           <select
@@ -142,10 +142,8 @@ export default function RegistroAlumno() {
             required
           >
             <option value="">Selecciona una escuela</option>
-            {escuelas.map((e: any) => (
-              <option key={e.id} value={e.id}>
-                {e.nombre}
-              </option>
+            {escuelas.map((e) => (
+              <option key={e.id} value={e.id}>{e.nombre}</option>
             ))}
           </select>
 
@@ -157,10 +155,8 @@ export default function RegistroAlumno() {
             required
           >
             <option value="">Selecciona una carrera</option>
-            {carreras.map((c: any) => (
-              <option key={c.id} value={c.id}>
-                {c.nombre}
-              </option>
+            {carreras.map((c) => (
+              <option key={c.id} value={c.id}>{c.nombre}</option>
             ))}
           </select>
 
@@ -172,10 +168,8 @@ export default function RegistroAlumno() {
           </button>
 
           <p className="text-sm text-center mt-4">
-            ¿Ya tienes cuenta?{" "}
-            <a href="/login" className="text-blue-600 font-semibold hover:underline">
-              Inicia sesión
-            </a>
+            ¿Ya tienes cuenta?{' '}
+            <a href="/login" className="text-blue-600 font-semibold hover:underline">Inicia sesión</a>
           </p>
         </form>
       </div>
@@ -184,7 +178,7 @@ export default function RegistroAlumno() {
       <div
         className="hidden md:flex md:w-1/2 bg-cover bg-center"
         style={{ backgroundImage: "url('/hoja.png')" }}
-      ></div>
+      />
     </div>
   );
 }

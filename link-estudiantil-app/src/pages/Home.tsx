@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -45,26 +46,25 @@ export default function Home() {
         .eq("publicar_en_home", true)
         .order("fecha", { ascending: true })
         .limit(3);
-
       if (!error) setActividades(data);
     };
-
     fetchActividades();
   }, []);
 
   return (
     <div className="bg-white min-h-screen font-sans">
       <Navbar />
+      
 
       {/* Hero Slider */}
       <Swiper
         modules={[Autoplay]}
         autoplay={{ delay: 5000, disableOnInteraction: false }}
-        loop={true}
+        loop
         className="h-[500px]"
       >
-        {heroSlides.map((slide, index) => (
-          <SwiperSlide key={index}>
+        {heroSlides.map((slide, i) => (
+          <SwiperSlide key={i}>
             <header
               className="relative bg-cover bg-center h-full"
               style={{ backgroundImage: `url('${slide.imagen}')` }}
@@ -130,6 +130,31 @@ export default function Home() {
         ))}
       </section>
 
+      {/* Nueva sección: Requerimientos */}
+      <section className="max-w-6xl mx-auto flex flex-col md:flex-row items-center bg-blue-50 p-8 rounded-lg space-y-6 md:space-y-0 md:space-x-8 mb-12">
+        <img
+          src="/requerimientos-illustration.png"
+          alt="Enviar requerimientos"
+          className="w-full md:w-1/2 rounded-lg shadow"
+        />
+        <div className="md:w-1/2">
+          <h2 className="text-2xl font-bold text-blue-900 mb-4">
+            ¿Tienes una idea? ¡Compártela!
+          </h2>
+          <p className="text-gray-700 mb-6">
+            Ahora puedes enviar requerimientos directamente a tu consejero desde
+            la plataforma. Sugiere actividades, comparte propuestas o reporta
+            incidencias con un clic.
+          </p>
+          <button
+            onClick={() => navigate("/requerimiento")}
+            className="bg-blue-600 text-white px-5 py-3 rounded hover:bg-blue-700 transition"
+          >
+            Enviar Requerimiento
+          </button>
+        </div>
+      </section>
+
       {/* Actividades Destacadas */}
       <section className="py-10 px-6">
         <h2 className="text-2xl font-bold text-center text-blue-900 mb-8">
@@ -159,6 +184,8 @@ export default function Home() {
           )}
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 }

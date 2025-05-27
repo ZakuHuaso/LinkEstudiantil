@@ -21,12 +21,12 @@ export default function RequerimientosRecibidos() {
       const { data: cj } = await supabase.from("consejeros").select("id").eq("correo", auth.user.email).single()
       if (!cj) return
       const { data: reqs } = await supabase
-        .from<RequerimientoRaw>("requerimientos")
+        .from("requerimientos")
         .select("id, tipo, descripcion, fecha_envio, imagen_url, alumno_id, estado, respuesta")
         .eq("consejero_id", cj.id)
       if (!reqs) return
       const ids = Array.from(new Set(reqs.map(r => r.alumno_id)))
-      const { data: alms } = await supabase.from<Alumno>("alumnos").select("id, nombre, correo").in("id", ids)
+      const { data: alms } = await supabase.from("alumnos").select("id, nombre, correo").in("id", ids)
       if (!alms) return
       const map = Object.fromEntries(alms.map(a => [a.id, a]))
       setRequerimientos(reqs.map(r => ({ ...r, alumno: map[r.alumno_id] })))
