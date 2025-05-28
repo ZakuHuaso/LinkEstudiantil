@@ -1,10 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 
 export default function Coordinador() {
   const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const tabs = [
     { titulo: "Eventos y Talleres", link: "/talleres" },
@@ -83,21 +81,9 @@ export default function Coordinador() {
   ];
 
   return (
-    <div className="flex min-h-screen font-sans bg-gray-100 relative">
-      {/* Botón de menú */}
-      <button
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-        className="fixed top-4 left-4 z-40 text-2xl bg-white p-2 rounded shadow"
-      >
-        ☰
-      </button>
-
-      {/* Sidebar deslizante */}
-      <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-[#0f1e54] text-white z-30 transition-transform duration-300 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-      >
+    <div className="flex min-h-screen font-sans bg-gray-100">
+      {/* Sidebar fijo */}
+      <aside className="fixed top-0 left-0 h-full w-64 bg-[#0f1e54] text-white z-30">
         <div className="flex flex-col justify-between h-full">
           <div>
             {/* Logo y perfil */}
@@ -148,7 +134,7 @@ export default function Coordinador() {
       </aside>
 
       {/* Panel principal */}
-      <div className="flex-1 ml-0 lg:ml-64">
+      <div className="flex-1 ml-64">
         {/* Header */}
         <div className="bg-white px-6 py-4 shadow flex items-center gap-4">
           {tabs.map((tab, i) => (
