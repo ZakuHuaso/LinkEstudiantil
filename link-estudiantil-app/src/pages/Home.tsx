@@ -13,6 +13,9 @@ import {
   StickyNote,
   CheckCircle,
 } from "lucide-react";
+import CalendarioActividades from "../components/CalendarioActividades";
+import DirectorioConsejeros from "../components/DirectorioConsejeros";
+
 
 const heroSlides = [
   {
@@ -154,6 +157,8 @@ export default function Home() {
           </button>
         </div>
       </section>
+        {/* Calendario de Actividades */}
+<CalendarioActividades />
 
       {/* Actividades Destacadas */}
       <section className="py-10 px-6">
@@ -184,6 +189,8 @@ export default function Home() {
           )}
         </div>
       </section>
+
+      <DirectorioConsejeros />
 
       <Footer />
     </div>
