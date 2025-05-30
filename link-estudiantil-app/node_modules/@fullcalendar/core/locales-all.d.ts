@@ -1,2 +1,6 @@
-declare const _default: import("@fullcalendar/common").LocaleInput[];
-export default _default;
+import { LocaleInput } from './index.js';
+
+declare const allLocales: LocaleInput[];
+//# sourceMappingURL=locales-all.d.ts.map
+
+export { allLocales as default };

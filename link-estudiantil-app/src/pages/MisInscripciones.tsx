@@ -78,28 +78,45 @@ export default function MisInscripciones() {
           <p className="text-center text-gray-500">Cargando...</p>
         ) : actividades.length > 0 ? (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {actividades.map((a) => (
-               <div key={a.inscripcionId}
-                className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition flex flex-col justify-between"
-              >
-                <div>
-                  <h2 className="text-xl font-semibold text-blue-800 mb-2">
-                    {a.titulo}
-                  </h2>
-                  <p className="text-sm text-gray-700 mb-1">{a.descripcion}</p>
-                  <p className="text-sm text-gray-500">Fecha: {a.fecha}</p>
-                  <p className="text-sm text-gray-500">Hora: {a.hora}</p>
-                  <p className="text-sm text-gray-500">Lugar: {a.lugar}</p>
-                </div>
-                <button
-                  onClick={() => handleDesinscribir(a.inscripcionId)}
-                  className="mt-4 bg-red-600 text-white py-2 rounded hover:bg-red-700 transition"
-                >
-                  Desinscribirme
-                </button>
-              </div>
-            ))}
-          </div>
+  {actividades.map((a) => (
+    <div
+      key={a.inscripcionId}
+      className="bg-white rounded-lg shadow hover:shadow-lg transition flex flex-col justify-between border border-gray-200"
+    >
+      <div className="p-5">
+        <h2 className="text-xl font-semibold text-blue-800 mb-2 line-clamp-2">
+          {a.titulo}
+        </h2>
+
+        <p className="text-sm text-gray-700 mb-3 line-clamp-3">
+          {a.descripcion}
+        </p>
+
+        <div className="space-y-1 text-sm text-gray-600">
+          <p>
+            📅 Fecha:{" "}
+            {new Date(a.fecha).toLocaleDateString("es-CL", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+            })}
+          </p>
+          <p>🕒 Hora: {a.hora}</p>
+          <p>📍 Lugar: {a.lugar}</p>
+        </div>
+      </div>
+
+      <div className="p-5 border-t flex items-center justify-between">
+        <button
+          onClick={() => handleDesinscribir(a.inscripcionId)}
+          className="text-sm bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
+        >
+          Desinscribirme
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
         ) : (
           <p className="text-center text-gray-500">
             No estás inscrito en ninguna actividad.

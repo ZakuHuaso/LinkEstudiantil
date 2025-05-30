@@ -55,7 +55,7 @@ export default function Navbar() {
 
   const botones = {
     estudiante: [
-      { label: "Inicio", path: "/home" },
+      
       { label: `Notificaciones (${notificaciones})`, path: "/notificaciones" },
     ],
     consejero: [

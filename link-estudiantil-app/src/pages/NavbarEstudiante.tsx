@@ -3,10 +3,12 @@ import { NavLink } from "react-router-dom"
 
 export default function StudentNav() {
   const links = [
+    { to: "/home", label: "Inicio" },
     { to: "/eventos", label: "Actividades" },
     { to: "/fondos", label: "Fondos" },
     { to: "/requerimiento", label: "Requerimientos" },
     { to: "/mis-eventos", label: "Inscripciones" },
+    
   ]
 
   return (

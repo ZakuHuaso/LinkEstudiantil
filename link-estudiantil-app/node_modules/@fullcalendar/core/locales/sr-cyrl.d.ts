@@ -1,3 +1,6 @@
-import { LocaleInput } from '@fullcalendar/common';
+import { LocaleInput } from '../index.js';
+
 declare const _default: LocaleInput;
-export default _default;
+//# sourceMappingURL=sr-cyrl.d.ts.map
+
+export { _default as default };
