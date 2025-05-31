@@ -22,61 +22,76 @@ export default function Login() {
   }, [navigate])
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError("")
-    setLoading(true)
+  e.preventDefault(); // para evitar recarga del form
+  setError("");
+  setLoading(true);
 
-    if (!tipoUsuario) {
-      setError("Debes seleccionar un tipo de usuario.")
-      setLoading(false)
-      return
-    }
+  
 
-    const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password })
-    if (authError || !data.user) {
-      setError("Correo o contraseña incorrectos")
-      setLoading(false)
-      return
-    }
 
-    // Inserta alumno si es necesario
-    if (tipoUsuario === "estudiante") {
-      const { data: alumnoExistente } = await supabase
-        .from("alumnos")
-        .select("id")
-        .eq("id", data.user.id)
-        .single()
-      if (!alumnoExistente) {
-        await supabase.from("alumnos").insert({
-          id: data.user.id,
-          correo: data.user.email,
-          nombre: data.user.user_metadata?.nombre || "Sin nombre",
-          carrera: data.user.user_metadata?.carrera || "Sin carrera"
-        })
-      }
-    }
+  
 
-    // Valida perfil en la tabla correspondiente
-    const tabla =
-      tipoUsuario === "estudiante" ? "alumnos"
-      : tipoUsuario === "consejero" ? "consejeros"
-      : "coordinadores"
+  // 1️⃣ Login
+  const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
 
-    const { data: perfil, error: perfilError } = await supabase
-      .from(tabla)
-      .select("*")
-      .eq("id", data.user.id)
-      .single()
-
-    if (!perfil || perfilError) {
-      setError("No se encontró el perfil del usuario.")
-      setLoading(false)
-      return
-    }
-
-    navigate("/home")
-    setLoading(false)
+  if (loginError || !loginData.user) {
+    setError("Correo o contraseña incorrectos.");
+    setLoading(false);
+    return;
   }
+
+  const userId = loginData.user.id;
+
+  // 2️⃣ Según el tipo de usuario
+  if (tipoUsuario === "estudiante") {
+    const { data: alumno } = await supabase
+      .from("alumnos")
+      .select("id")
+      .eq("id", userId)
+      .single();
+
+    if (alumno) {
+      navigate("/home"); // ruta estudiante
+    } else {
+      setError("Este correo no está registrado como estudiante.");
+    }
+
+  } else if (tipoUsuario === "consejero") {
+    const { data: consejero } = await supabase
+      .from("consejeros")
+      .select("id")
+      .eq("id", userId)
+      .single();
+
+    if (consejero) {
+      navigate("/consejero"); // ruta consejero
+    } else {
+      setError("Este correo no está registrado como consejero.");
+    }
+
+  } else if (tipoUsuario === "coordinador") {
+    const { data: coordinador } = await supabase
+      .from("coordinadores")
+      .select("id")
+      .eq("id", userId)
+      .single();
+
+    if (coordinador) {
+      navigate("/coordinador"); // ruta coordinador
+    } else {
+      setError("Este correo no está registrado como coordinador.");
+    }
+
+  } else {
+    setError("Por favor selecciona un tipo de usuario.");
+  }
+
+  setLoading(false);
+};
+
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">

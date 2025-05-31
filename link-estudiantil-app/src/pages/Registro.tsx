@@ -53,7 +53,7 @@ export default function RegistroAlumno() {
     setError("");
     setMensaje("");
 
-    if (!correo.endsWith("@duocuc.cl")) {
+    if (!correo.endsWith("@duocuc.cl" ) || (!correo.endsWith("@gmail.com" )))  {
       setError("Solo se permiten correos @duocuc.cl");
       return;
     }
@@ -169,7 +169,7 @@ export default function RegistroAlumno() {
 
           <p className="text-sm text-center mt-4">
             ¿Ya tienes cuenta?{' '}
-            <a href="/login" className="text-blue-600 font-semibold hover:underline">Inicia sesión</a>
+            <a href="/" className="text-blue-600 font-semibold hover:underline">Inicia sesión</a>
           </p>
         </form>
       </div>

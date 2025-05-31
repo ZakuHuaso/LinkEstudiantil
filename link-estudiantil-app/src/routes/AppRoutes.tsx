@@ -13,8 +13,9 @@ import Notificaciones from "../pages/Notificaciones";
 import ConsejeroLayout from "../components/ConsejeroLayout";
 import RequerimientosRecibidos from "../pages/RequerimientosRecibidos";
 import PerfilConsejero from "../pages/PerfilConsejero";
+import ConsejeroDashboard from "../pages/ConsejeroDashboard";
 
-const ConsejeroDashboard = () => <div className="p-6"><h1>Bienvenido Consejero!</h1><p>Este es el dashboard principal.</p></div>;
+
 const CrearPropuesta = () => <div className="p-6"><h1>Crear Nueva Propuesta</h1><p>Aquí podrás crear nuevas propuestas.</p></div>;
 const MisPropuestas = () => <div className="p-6"><h1>Mis Propuestas</h1><p>Aquí verás tus propuestas creadas.</p></div>;
 const Estadisticas = () => <div className="p-6"><h1>Estadísticas</h1><p>Gráficos y métricas sobre requerimientos y propuestas.</p></div>;
