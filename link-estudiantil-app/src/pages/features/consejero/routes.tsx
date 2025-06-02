@@ -3,9 +3,9 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 
 import ConsejeroLayout from "./layout/ConsejeroLayout";
-import RequerimientosRecibidos from "../../RequerimientosRecibidos";
-import PerfilConsejero from "../../PerfilConsejero";
-import ConsejeroDashboard from "../../ConsejeroDashboard";
+import RequerimientosRecibidos from "./pages/RequerimientosRecibidos";
+import PerfilConsejero from "./pages/PerfilConsejero";
+import ConsejeroDashboard from "./pages/ConsejeroDashboard";
 
 const CrearPropuesta = () => (
   <div className="p-6">
