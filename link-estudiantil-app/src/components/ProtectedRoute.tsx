@@ -41,6 +41,7 @@ export default function ProtectedRoute({ children, allowedRoles }: Props) {
           .single()
 
         if (data && !error) {
+          console.log("Rol detectado:", t.rol)
           rol = t.rol
           break
         }
