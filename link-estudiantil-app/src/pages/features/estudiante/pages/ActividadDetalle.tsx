@@ -39,7 +39,7 @@ export default function ActividadDetalle() {
   }, [id]);
 
   const handleInscripcion = async () => {
-    // 1️⃣ Obtener capacidad e inscritos
+    // Obtener capacidad e inscritos
     const { data: actividadData, error: actividadError } = await supabase
       .from("Actividades")
       .select("capacidad, inscritos")
@@ -52,13 +52,13 @@ export default function ActividadDetalle() {
       return;
     }
 
-    // 2️⃣ Verificar si hay cupos
+    // Verificar si hay cupos
     if (actividadData.inscritos >= actividadData.capacidad) {
       alert("❌ Esta actividad ya está llena.");
       return;
     }
 
-    // 3️⃣ Insertar inscripción
+    // Insertar inscripción
     const { error: insertError } = await supabase.from("Inscripciones").insert([
       {
         alumno_id: usuarioId,
@@ -72,7 +72,7 @@ export default function ActividadDetalle() {
       return;
     }
 
-    // 4️⃣ Incrementar inscritos de forma SEGURA usando la función
+    // Incrementar inscritos de forma SEGURA usando la función
     const { error: updateError } = await supabase.rpc("incrementar_inscritos", {
       actividad_id_input: id,
     });
@@ -83,10 +83,10 @@ export default function ActividadDetalle() {
       return;
     }
 
-    // 🔄 Refrescar actividad (para que muestre los cupos actualizados)
+    // Refrescar actividad (para que muestre los cupos actualizados)
     await obtenerDatos();
 
-    // 5️⃣ Confirmar inscripción
+    // Confirmar inscripción
     setInscrito(true);
     alert("✅ Te has inscrito correctamente.");
   };
