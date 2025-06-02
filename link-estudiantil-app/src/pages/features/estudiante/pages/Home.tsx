@@ -33,7 +33,7 @@ const heroSlides = [
   {
     imagen: "/slide3.jpg",
     titulo: "Sé Parte del Cambio",
-    texto: "Envía tus propuestas y transforma tu experiencia estudiantil.",
+    texto: "Envía tus propuestas a tu consejero y transforma tu experiencia estudiantil.",
   },
 ];
 
