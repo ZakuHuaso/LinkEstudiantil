@@ -6,24 +6,12 @@ import ConsejeroLayout from "./layout/ConsejeroLayout";
 import RequerimientosRecibidos from "./pages/RequerimientosRecibidos";
 import PerfilConsejero from "./pages/PerfilConsejero";
 import ConsejeroDashboard from "./pages/ConsejeroDashboard";
+import CrearPropuesta from "./pages/CrearPropuesta";
+import MisPropuestas from "./pages/MisPropuestas";
 
-const CrearPropuesta = () => (
+const Actividades = () => (
   <div className="p-6">
-    <h1>Crear Nueva Propuesta</h1>
-    <p>Aquí podrás crear nuevas propuestas.</p>
-  </div>
-);
-
-const MisPropuestas = () => (
-  <div className="p-6">
-    <h1>Mis Propuestas</h1>
-    <p>Aquí verás tus propuestas creadas.</p>
-  </div>
-);
-
-const Estadisticas = () => (
-  <div className="p-6">
-    <h1>Estadísticas</h1>
+    <h1>Actividades</h1>
     <p>Gráficos y métricas sobre requerimientos y propuestas.</p>
   </div>
 );
@@ -36,7 +24,7 @@ export function ConsejeroRoutes() {
             <Route path="requerimientos-recibidos" element={<RequerimientosRecibidos />} />
             <Route path="crear-propuesta" element={<CrearPropuesta />} />
             <Route path="mis-propuestas" element={<MisPropuestas />} />
-            <Route path="estadisticas" element={<Estadisticas />} />
+            <Route path="actividades" element={<Actividades />} />
             <Route path="perfil" element={<PerfilConsejero />} />
         </Route>
         <Route path="*" element={<Navigate to="/consejero" replace />} />
