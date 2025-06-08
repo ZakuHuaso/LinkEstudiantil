@@ -9,18 +9,25 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fullcalendar/core": "^6.1.9",
+    "@fullcalendar/daygrid": "^6.1.9",
+    "@fullcalendar/react": "^6.1.9",
+    "@heroicons/react": "^2.2.0",
     "@supabase/supabase-js": "^2.49.4",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.21.0"
+    "lucide-react": "^0.511.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.21.0",
+    "recharts": "^2.15.3",
+    "swiper": "^11.2.8"
   },
   "devDependencies": {
     "@types/react": "^18.2.41",
     "@types/react-dom": "^18.2.17",
     "@vitejs/plugin-react": "^4.3.4",
-    "autoprefixer": "^10.4.17",
-    "postcss": "^8.4.33",
-    "tailwindcss": "^3.4.1",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.4",
+    "tailwindcss": "^3.4.17",
     "typescript": "^5.3.3",
     "vite": "^6.2.5"
   }
