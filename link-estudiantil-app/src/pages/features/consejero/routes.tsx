@@ -6,7 +6,7 @@ import ConsejeroLayout from "./layout/ConsejeroLayout";
 import RequerimientosRecibidos from "./pages/RequerimientosRecibidos";
 import PerfilConsejero from "./pages/PerfilConsejero";
 import ConsejeroDashboard from "./pages/ConsejeroDashboard";
-import Notificaciones from "../../Notificaciones";
+
 const CrearPropuesta = () => (
   <div className="p-6">
     <h1>Crear Nueva Propuesta</h1>
@@ -38,7 +38,7 @@ export function ConsejeroRoutes() {
             <Route path="mis-propuestas" element={<MisPropuestas />} />
             <Route path="estadisticas" element={<Estadisticas />} />
             <Route path="perfil" element={<PerfilConsejero />} />
-            <Route path="/notificaciones" element={<Notificaciones rol="estudiante" />} />
+            
         </Route>
         <Route path="*" element={<Navigate to="/consejero" replace />} />
         </Routes>
