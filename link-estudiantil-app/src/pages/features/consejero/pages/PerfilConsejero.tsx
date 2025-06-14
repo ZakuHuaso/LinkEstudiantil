@@ -2,17 +2,17 @@ import { useEffect, useState } from "react";
 import {
   MapPinIcon,
   EnvelopeIcon,
-  PencilIcon,
-  CheckIcon,
-  XMarkIcon,
 } from "@heroicons/react/24/outline";
+import { FaDiscord, FaInstagram } from "react-icons/fa";
 import { supabase } from "../../../../lib/supabaseClient";
+import UploadPhoto from "../components/UploadPhoto"; // Asegúrate de que la ruta sea correcta
 
 interface PerfilConsejeroRow {
   id: string;
   discord: string;
   instagram: string;
   about: string;
+  fotoperfil: string;
   consejeros: { nombre: string; correo: string }[];
 }
 
@@ -21,6 +21,9 @@ export default function PerfilConsejero() {
   const [editMode, setEditMode] = useState(false);
   const [form, setForm] = useState<Partial<PerfilConsejeroRow>>({});
   const [loading, setLoading] = useState(false);
+  const [correoConsejero, setCorreoConsejero] = useState("");
+
+
 
   useEffect(() => {
     (async () => {
@@ -37,6 +40,7 @@ export default function PerfilConsejero() {
           discord,
           instagram,
           about,
+          fotoperfil,
           consejeros (
             nombre,
             correo
@@ -54,10 +58,34 @@ export default function PerfilConsejero() {
           discord: data.discord,
           instagram: data.instagram,
           about: data.about,
+          fotoperfil: data.fotoperfil,
         });
       }
     })();
   }, []);
+
+  useEffect(() => {
+    const fetchCorreoConsejero = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from("consejeros")
+        .select("correo")
+        .eq("id", user.id)
+        .single();
+
+      if (!error && data) {
+        setCorreoConsejero(data.correo); // ✅ actualizamos el estado
+      } else {
+        console.error("Error al obtener nombre del consejero:", error);
+      }
+    };
+
+    fetchCorreoConsejero();
+  }, []);
+
+
 
   const handleSave = async () => {
     if (!perfil) return;
@@ -68,6 +96,7 @@ export default function PerfilConsejero() {
       discord: form.discord,
       instagram: form.instagram,
       about: form.about,
+      fotoperfil: form.fotoperfil || perfil.fotoperfil, // Mantener foto si no se cambia
     };
 
     const { data, error } = await supabase
@@ -98,13 +127,27 @@ export default function PerfilConsejero() {
       <div className="bg-purple-800 text-white py-8 relative">
         <div className="container mx-auto px-6 flex items-center">
           <div className="w-28 h-28 rounded-full bg-gray-300 overflow-hidden">
-            <img
-              src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-                consejero.nombre
-              )}&background=7F3FBF&color=fff&size=128`}
-              alt={consejero.nombre}
-              className="w-full h-full object-cover"
-            />
+            {form.fotoperfil ? (
+              <img
+                src={form.fotoperfil}
+                alt={consejero.nombre}
+                className="w-full h-full object-cover"
+              />
+            ) : perfil?.fotoperfil ? (
+              <img
+                src={perfil.fotoperfil}
+                alt={consejero.nombre}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <img
+                src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                  consejero.nombre
+                )}&background=7F3FBF&color=fff&size=128`}
+                alt={consejero.nombre}
+                className="w-full h-full object-cover"
+              />
+            )}
           </div>
           <div className="ml-6 flex-1">
             <h2 className="text-3xl font-bold">{consejero.nombre}</h2>
@@ -126,12 +169,22 @@ export default function PerfilConsejero() {
         </div>
       </div>
 
+      {/* Selector de foto: solo visible en modo edición */}
+      {editMode && (
+        <div className="p-6 border-t border-gray-200">
+          <UploadPhoto
+            userId={perfil.id}
+            onUploadComplete={(url) => setForm({ ...form, fotoperfil: url })}
+          />
+        </div>
+      )}
+
       {/* Body */}
       <div className="p-8 space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Discord */}
           <div className="flex items-center text-gray-700">
-            <EnvelopeIcon className="h-6 w-6 mr-2 text-orange-500" />
+            <FaDiscord className="h-6 w-6 mr-2 text-black-500" />
             {editMode ? (
               <input
                 type="text"
@@ -147,7 +200,7 @@ export default function PerfilConsejero() {
 
           {/* Instagram */}
           <div className="flex items-center text-gray-700">
-            <MapPinIcon className="h-6 w-6 mr-2 text-orange-500" />
+            <FaInstagram className="h-6 w-6 mr-2 text-black-500" />
             {editMode ? (
               <input
                 type="text"
@@ -162,6 +215,13 @@ export default function PerfilConsejero() {
               <span>{perfil.instagram}</span>
             )}
           </div>
+
+          {/* Correo Consejero */}
+          <div className="flex items-center text-gray-700">
+            <EnvelopeIcon className="h-6 w-6 mr-2 text-orange-500" />
+            <span>{correoConsejero || "Cargando correo..."}</span>
+          </div>
+
         </div>
 
         {/* About */}
