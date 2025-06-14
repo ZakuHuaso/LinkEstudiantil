@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import {
   MapPinIcon,
-  PhoneIcon,
   EnvelopeIcon,
   PencilIcon,
   CheckIcon,
@@ -32,8 +31,9 @@ export default function PerfilConsejero() {
 
       const { data, error } = await supabase
         .from("PerfilConsejero")
-        .select(`
-            id,
+        .select(
+          `
+          id,
           discord,
           instagram,
           about,
@@ -41,7 +41,8 @@ export default function PerfilConsejero() {
             nombre,
             correo
           )
-        `)
+        `
+        )
         .eq("id", user.id)
         .single();
 
@@ -71,15 +72,14 @@ export default function PerfilConsejero() {
 
     const { data, error } = await supabase
       .from("PerfilConsejero")
-      .upsert(updates)
-      .select()  // devuelve la fila actualizada
+      .update(updates)
+      .eq("id", perfil.id)
+      .select()
       .single();
-
     if (error) {
       console.error("Error actualizando perfil:", error);
     } else {
-      // conservamos el array consejero intacto
-      setPerfil({ ...data, consejero: perfil.consejeros });
+      setPerfil({ ...data, consejeros: perfil.consejeros }); // 👈 mantener correo y nombre
       setEditMode(false);
     }
 
@@ -90,61 +90,36 @@ export default function PerfilConsejero() {
     return <p className="p-6 text-center text-gray-500">Cargando perfil…</p>;
   }
 
- const consejero = perfil.consejeros?.[0] ?? { nombre: "", correo: "" };
+  const consejero = perfil.consejeros?.[0] ?? { nombre: "", correo: "" };
 
   return (
-  <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
-    {/* Header */}
-    <div className="bg-purple-800 text-white py-8 relative">
-      <div className="container mx-auto px-6 flex items-center">
-        <div className="w-28 h-28 rounded-full bg-gray-300 overflow-hidden">
-          <img
-            src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-              consejero.nombre || "X"
-            )}&background=7F3FBF&color=fff&size=128`}
-            alt={consejero.nombre}
-            className="w-full h-full object-cover"
-          />
+    <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+      {/* Header */}
+      <div className="bg-purple-800 text-white py-8 relative">
+        <div className="container mx-auto px-6 flex items-center">
+          <div className="w-28 h-28 rounded-full bg-gray-300 overflow-hidden">
+            <img
+              src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                consejero.nombre
+              )}&background=7F3FBF&color=fff&size=128`}
+              alt={consejero.nombre}
+              className="w-full h-full object-cover"
+            />
           </div>
           <div className="ml-6 flex-1">
             <h2 className="text-3xl font-bold">{consejero.nombre}</h2>
             <p className="text-purple-200">{consejero.correo}</p>
-          </div>
-          <div className="ml-auto flex items-center space-x-2">
-            {editMode ? (
-              <>
-                <button
-                  onClick={handleSave}
-                  disabled={loading}
-                  className="p-2 bg-green-500 rounded-full hover:bg-green-600"
-                >
-                  <CheckIcon className="w-5 h-5 text-white" />
-                </button>
-                <button
-                  onClick={() => {
-                    setEditMode(false);
-                    setForm({
-                      discord: perfil.discord,
-                      instagram: perfil.instagram,
-                      about: perfil.about,
-                    });
-                  }}
-                  className="p-2 bg-red-500 rounded-full hover:bg-red-600"
-                >
-                  <XMarkIcon className="w-5 h-5 text-white" />
-                </button>
-              </>
-            ) : (
+
+            {!editMode && (
               <button
                 onClick={() => setEditMode(true)}
-                className="p-2 bg-white bg-opacity-20 rounded-full hover:bg-opacity-30"
+                className="mt-4 bg-white bg-opacity-20 text-white px-4 py-2 rounded hover:bg-opacity-30 transition"
               >
-                <PencilIcon className="w-5 h-5 text-white" />
+                Editar perfil
               </button>
             )}
           </div>
         </div>
-        {/* Decorative circles */}
         <div className="absolute top-1/2 right-0 transform -translate-y-1/2 flex space-x-4 pr-6">
           <div className="w-16 h-16 rounded-full bg-orange-400 bg-opacity-30"></div>
           <div className="w-24 h-24 rounded-full bg-yellow-400 bg-opacity-30"></div>
@@ -154,15 +129,14 @@ export default function PerfilConsejero() {
       {/* Body */}
       <div className="p-8 space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Discord */}
           <div className="flex items-center text-gray-700">
             <EnvelopeIcon className="h-6 w-6 mr-2 text-orange-500" />
             {editMode ? (
               <input
                 type="text"
                 value={form.discord || ""}
-                onChange={(e) =>
-                  setForm({ ...form, discord: e.target.value })
-                }
+                onChange={(e) => setForm({ ...form, discord: e.target.value })}
                 placeholder="Discord ID"
                 className="border-b border-gray-300 flex-1 px-1 py-0.5"
               />
@@ -170,6 +144,8 @@ export default function PerfilConsejero() {
               <span>{perfil.discord}</span>
             )}
           </div>
+
+          {/* Instagram */}
           <div className="flex items-center text-gray-700">
             <MapPinIcon className="h-6 w-6 mr-2 text-orange-500" />
             {editMode ? (
@@ -188,6 +164,7 @@ export default function PerfilConsejero() {
           </div>
         </div>
 
+        {/* About */}
         <div>
           <h3 className="text-xl font-bold text-gray-800 mb-2">Sobre mí</h3>
           {editMode ? (
@@ -201,6 +178,32 @@ export default function PerfilConsejero() {
             <p className="text-gray-700">{perfil.about}</p>
           )}
         </div>
+
+        {/* Botones de acción */}
+        {editMode && (
+          <div className="flex justify-end gap-3 pt-4">
+            <button
+              onClick={() => {
+                setEditMode(false);
+                setForm({
+                  discord: perfil.discord,
+                  instagram: perfil.instagram,
+                  about: perfil.about,
+                });
+              }}
+              className="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300 transition"
+            >
+              Cancelar
+            </button>
+            <button
+              onClick={handleSave}
+              disabled={loading}
+              className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition"
+            >
+              {loading ? "Guardando..." : "Guardar cambios"}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
