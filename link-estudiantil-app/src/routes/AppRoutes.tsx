@@ -1,31 +1,42 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
-import Login from "../pages/Login"
-import Register from "../pages/Registro"
+// src/routes/AppRoutes.tsx
 
-import Home from "../pages/Home"
-import EnviarRequerimiento from "../pages/EnviarRequerimiento"
-import ActividadDetalle from "../pages/ActividadDetalle"
-import Actividades from "../pages/Actividades"
-import MisInscripciones from "../pages/MisInscripciones"
-import RequerimientosRecibidos from "../pages/RequerimientosRecibidos"
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import Login from "../pages/Login";
+import Register from "../pages/Registro";
 
+import { EstudianteRoutes } from "../pages/features/estudiante/routes";
+import { ConsejeroRoutes } from "../pages/features/consejero/routes";
+import { CoordinadorRoutes } from "../pages/features/coordinador/routes";
 
 
 export default function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Rutas públicas */}
         <Route path="/" element={<Login />} />
-        <Route path="/home" element={<Home />} />
         <Route path="/registro" element={<Register />} />
-        <Route path="/requerimiento" element={<EnviarRequerimiento />} />
-        <Route path="/actividad/:id" element={<ActividadDetalle />} />
-        <Route path="/eventos" element={<Actividades />} />
-        <Route path="/mis-eventos" element={<MisInscripciones />} />
-        <Route path="/requerimientos-recibidos" element={<RequerimientosRecibidos />} />
-       
+
+        {/* Rutas estudiante */}
+        <Route path="/*" element={<EstudianteRoutes />} />
+
+        {/* Rutas consejero */}
+        <Route path="/consejero/*" element={<ConsejeroRoutes />} />
+
+        {/* Rutas coordinador */}
+        <Route path="/coordinador/*" element={<CoordinadorRoutes />} />
+
+        {/* Ruta 404 */}
+        <Route
+          path="*"
+          element={
+            <p className="text-center text-red-500 mt-20 text-xl">
+              404: Página no encontrada
+            </p>
+          }
+        />
       </Routes>
     </BrowserRouter>
-  )
+  );
 }
