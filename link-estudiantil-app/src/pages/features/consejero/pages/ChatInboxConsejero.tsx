@@ -71,7 +71,7 @@ export default function ChatInboxConsejero() {
       .maybeSingle();
 
     if (existente) {
-      navigate(`/consejero/Chats/${existente.id}`);
+      navigate(`/consejero/chats/${existente.id}`);
       return;
     }
 
@@ -87,7 +87,7 @@ export default function ChatInboxConsejero() {
       .single();
 
     if (!error && data) {
-      navigate(`/consejero/Chats/${data.id}`);
+      navigate(`/consejero/chats/${data.id}`);
     } else {
       console.error("Error creando conversación:", error?.message);
     }
@@ -117,7 +117,7 @@ export default function ChatInboxConsejero() {
           <li
             key={c.id}
             className="p-4 border rounded hover:bg-gray-50 cursor-pointer"
-            onClick={() => navigate(`/consejero/Chats/${c.id}`)}
+            onClick={() => navigate(`/consejero/chats/${c.id}`)}
           >
             <div className="font-semibold text-blue-800">{c.coordinador.nombre}</div>
             <div className="text-sm text-gray-600">{c.ultimo_mensaje || "Sin mensajes aún"}</div>

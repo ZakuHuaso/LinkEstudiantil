@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../../../../lib/supabaseClient";
 
 interface Mensaje {
@@ -19,6 +19,7 @@ export default function ChatPropuestaConsejero() {
   const [nombreReceptor, setNombreReceptor] = useState("");
   const [receptorId, setReceptorId] = useState("");
   const bottomRef = useRef<HTMLDivElement | null>(null);
+  const navigate = useNavigate();
 
   // Cargar usuario y datos iniciales
   useEffect(() => {
@@ -85,26 +86,42 @@ export default function ChatPropuestaConsejero() {
     };
   }, [id]);
 
-  const enviarMensaje = async () => {
-    if (!nuevoMensaje.trim() || !receptorId || !miId) return;
+ const enviarMensaje = async () => {
+  if (!nuevoMensaje.trim() || !receptorId || !miId) return;
 
-    const { error } = await supabase.from("mensajes").insert({
-      conversacion_id: id,
-      emisor_id: miId,
-      receptor_id: receptorId,
-      mensaje: nuevoMensaje,
-    });
+  const { error } = await supabase.from("mensajes").insert({
+    conversacion_id: id,
+    emisor_id: miId,
+    receptor_id: receptorId,
+    mensaje: nuevoMensaje,
+  });
 
-    if (!error) {
-      setNuevoMensaje("");
-      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-    } else {
-      console.error("Error al enviar mensaje:", error.message);
+  if (!error) {
+    // 🔁 Actualizar la conversación con el último mensaje
+    const { error: updateError } = await supabase
+      .from("conversaciones")
+      .update({
+        ultimo_mensaje: nuevoMensaje,
+        ultima_fecha: new Date().toISOString(),
+      })
+      .eq("id", id);
+
+    if (updateError) {
+      console.error("Error al actualizar conversación:", updateError.message);
     }
-  };
+
+    setNuevoMensaje("");
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  } else {
+    console.error("Error al enviar mensaje:", error.message);
+  }
+};
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white rounded shadow h-[80vh] flex flex-col">
+      <button onClick={() => navigate('/consejero/historial-chats')} className="text-sm text-blue-600 hover:underline mb-4 flex items-center">
+  ← Volver al historial
+</button>
       <h2 className="text-2xl font-bold mb-4">Chat con {nombreReceptor}</h2>
 
       <div className="flex-1 overflow-y-auto space-y-3 px-2">

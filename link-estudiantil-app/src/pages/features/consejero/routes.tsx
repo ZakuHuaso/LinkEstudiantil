@@ -9,8 +9,8 @@ import ConsejeroDashboard from "./pages/ConsejeroDashboard";
 import CrearPropuesta from "./pages/CrearPropuesta";
 import MisPropuestas from "./pages/MisPropuestas";
 import Actividades from "./pages/Actividades";
-
-
+import ChatInboxConsejero from "./pages/ChatInboxConsejero";
+import ChatPropuestaConsejero from "./pages/ChatPropuestaConsejero";
 export function ConsejeroRoutes() {
     return (
         <Routes>
@@ -21,6 +21,9 @@ export function ConsejeroRoutes() {
             <Route path="mis-propuestas" element={<MisPropuestas />} />
             <Route path="actividades" element={<Actividades />} />
             <Route path="perfil" element={<PerfilConsejero />} />
+            <Route path="historial-chats" element={<ChatInboxConsejero />} />
+            <Route path="chats/:id" element={<ChatPropuestaConsejero />} />
+            <Route path="chats" element={<ChatPropuestaConsejero />} />
         </Route>
         <Route path="*" element={<Navigate to="/consejero" replace />} />
         </Routes>
