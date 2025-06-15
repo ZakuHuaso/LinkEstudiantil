@@ -25,11 +25,9 @@ export default function CoordinadorLayout() {
     { name: 'Inicio', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m0 0v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6', path: '/coordinador/dashboard' },
     { name: 'Actividades', icon: 'M9 12h6m-6 4h6m2 4H7a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v12a2 2 0 01-2 2z', path: '/coordinador/actividades' },
     { name: 'Fondos Concursables', icon: 'M12 8c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zm0 12c4.418 0 8-1.79 8-4V6c0-2.21-3.582-4-8-4S4 3.79 4 6v10c0 2.21 3.582 4 8 4z', path: '/coordinador/fondos-concursables' },
-    { name: 'Talleres', icon: 'M3 7h18M3 12h18M3 17h18', path: '/coordinador/talleres' },
-    { name: 'Eventos', icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', path: '/coordinador/eventos' },
-    { name: 'Asistencia', icon: 'M5 13l4 4L19 7', path: '/coordinador/asistencia' },
+    
     { name: 'Revisar Propuestas', icon: 'M5 13l4 4L19 7', path: '/coordinador/revisar-propuestas' },
-    { name: 'Historial de chats', icon: 'M5 13l4 4L19 7', path: '/coordinador/Historial-chats' },
+    { name: 'Chats', icon: 'M5 13l4 4L19 7', path: '/coordinador/Historial-chats' },
     
   ];
 
