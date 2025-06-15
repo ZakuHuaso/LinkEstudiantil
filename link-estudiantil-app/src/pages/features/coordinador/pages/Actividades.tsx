@@ -81,6 +81,12 @@ export default function Actividades() {
     const [fecha, setFecha] = useState("");
     const [hora, setHora] = useState("");
     const [archivo, setArchivo] = useState<File | null>(null);
+    const [archivoUrl, setArchivoUrl] = useState<string>("");
+
+    const handleEliminarArchivo = () => {
+      setArchivo(null);
+      setArchivoUrl("");
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
@@ -90,8 +96,9 @@ export default function Actividades() {
         return;
       }
 
-      let archivoUrl = "";
-      if (archivo) {
+      let uploadedUrl = archivoUrl;
+
+      if (archivo && !archivoUrl) {
         const { data: uploadData, error: uploadError } = await supabase.storage
           .from("archivos_actividades")
           .upload(`actividades/${Date.now()}-${archivo.name}`, archivo);
@@ -105,7 +112,7 @@ export default function Actividades() {
           const { data: publicData } = supabase.storage
             .from("archivos_actividades")
             .getPublicUrl(uploadData.path);
-          archivoUrl = publicData.publicUrl;
+          uploadedUrl = publicData.publicUrl;
         }
       }
 
@@ -114,7 +121,7 @@ export default function Actividades() {
         descripcion,
         fecha: `${fecha}T${hora}`,
         estado: "borrador",
-        archivo: archivoUrl,
+        archivo: uploadedUrl || null,
       });
 
       if (error) {
@@ -164,9 +171,43 @@ export default function Actividades() {
           <input
             type="file"
             accept="image/*,.pdf,.doc,.docx"
-            onChange={(e) => setArchivo(e.target.files?.[0] || null)}
+            onChange={(e) => {
+              const file = e.target.files?.[0] || null;
+              setArchivo(file);
+              setArchivoUrl("");
+            }}
             className="p-2"
           />
+
+          {archivoUrl || archivo ? (
+            <div className="mt-2 flex items-center gap-2">
+              <a
+                href={archivoUrl || (archivo ? URL.createObjectURL(archivo) : "")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 underline break-all"
+              >
+                {archivo ? archivo.name : archivoUrl}
+              </a>
+              <button
+                type="button"
+                onClick={handleEliminarArchivo}
+                className="ml-2 text-red-600 font-bold hover:text-red-800"
+                aria-label="Eliminar archivo"
+                style={{
+                  background: "transparent",
+                  border: "none",
+                  cursor: "pointer",
+                  fontSize: "1.2rem",
+                  lineHeight: 1,
+                  padding: 0,
+                }}
+              >
+                ×
+              </button>
+            </div>
+          ) : null}
+
           <div className="flex justify-between">
             <button
               type="submit"
@@ -221,7 +262,7 @@ export default function Actividades() {
             <p className="text-sm">Asistentes: {a.asistentes}</p>
 
             {a.archivo && (
-              <p className="text-sm text-blue-600 underline">
+              <p className="text-sm text-blue-600 underline break-all">
                 <a href={a.archivo} target="_blank" rel="noopener noreferrer">
                   Ver archivo adjunto
                 </a>
