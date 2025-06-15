@@ -8,13 +8,8 @@ import PerfilConsejero from "./pages/PerfilConsejero";
 import ConsejeroDashboard from "./pages/ConsejeroDashboard";
 import CrearPropuesta from "./pages/CrearPropuesta";
 import MisPropuestas from "./pages/MisPropuestas";
+import Actividades from "./pages/Actividades";
 
-const Actividades = () => (
-  <div className="p-6">
-    <h1>Actividades</h1>
-    <p>Gráficos y métricas sobre requerimientos y propuestas.</p>
-  </div>
-);
 
 export function ConsejeroRoutes() {
     return (
