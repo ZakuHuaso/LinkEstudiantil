@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { supabase } from "../../../../lib/supabaseClient";
+import Navbar from "../../../../components/Navbar";
+import StudentNav from "../components/NavbarEstudiante";
+import Footer from "../../../../components/Footer";
 
 export default function ActividadDetalle() {
   const { id } = useParams();
@@ -100,30 +103,21 @@ export default function ActividadDetalle() {
     );
 
   return (
-    <div className="max-w-2xl mx-auto py-10 px-4">
-      <h1 className="text-3xl font-bold mb-4 text-blue-900">
-        {actividad.titulo}
-      </h1>
+    <>
+  <Navbar />
+  <StudentNav />
+  <div className="flex flex-col min-h-screen">
+    {/* Contenido principal */}
+    <main className="flex-1 max-w-2xl mx-auto py-10 px-4">
+      <h1 className="text-3xl font-bold mb-4 text-blue-900">{actividad.titulo}</h1>
       <p className="mb-3 text-gray-700">{actividad.descripcion}</p>
-      <p className="mb-1">
-        📅 Fecha:{" "}
-        {new Date(actividad.fecha).toLocaleDateString("es-CL", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-        })}
-      </p>
+      <p className="mb-1">📅 Fecha: {new Date(actividad.fecha).toLocaleDateString("es-CL")}</p>
       <p className="mb-1">🕒 Hora: {actividad.hora}</p>
       <p className="mb-4">📍 Lugar: {actividad.lugar}</p>
-
-      <p className="mb-3 text-gray-600">
-        Cupos: {actividad.inscritos} / {actividad.capacidad}
-      </p>
+      <p className="mb-3 text-gray-600">Cupos: {actividad.inscritos} / {actividad.capacidad}</p>
 
       {inscrito ? (
-        <p className="text-green-600 font-semibold">
-          Ya estás inscrito en esta actividad 🎉
-        </p>
+        <p className="text-green-600 font-semibold">Ya estás inscrito en esta actividad 🎉</p>
       ) : (
         <button
           onClick={handleInscripcion}
@@ -132,6 +126,12 @@ export default function ActividadDetalle() {
           Inscribirme
         </button>
       )}
-    </div>
+    </main>
+
+    {/* Footer pegado al final */}
+    <Footer />
+  </div>
+</>
+
   );
 }
