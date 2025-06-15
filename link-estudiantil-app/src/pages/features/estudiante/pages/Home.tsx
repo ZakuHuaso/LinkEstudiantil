@@ -16,7 +16,6 @@ import {
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 
-import DirectorioConsejeros from "../../../../components/DirectorioConsejeros";
 
 const heroSlides = [
   {
@@ -167,7 +166,7 @@ useEffect(() => {
                   </h1>
                   <p className="text-lg md:text-xl mb-6">{slide.texto}</p>
                   <button
-                    onClick={() => navigate("/eventos")}
+                    onClick={() => navigate("/actividades")}
                     className="bg-pink-600 hover:bg-pink-700 px-6 py-3 rounded text-white font-semibold"
                   >
                     Ver Actividades
@@ -186,7 +185,7 @@ useEffect(() => {
             titulo: "Actividades",
             desc: "Participa en eventos aprobados",
             icon: <CalendarCheck className="mx-auto w-8 h-8 text-blue-700" />,
-            link: "/eventos",
+            link: "/actividades",
           },
           {
             titulo: "Fondos",
@@ -204,7 +203,7 @@ useEffect(() => {
             titulo: "Inscripciones",
             desc: "Gestiona tus actividades inscritas",
             icon: <CheckCircle className="mx-auto w-8 h-8 text-green-600" />,
-            link: "/mis-eventos",
+            link: "/mis-inscripciones",
           },
         ].map((item, i) => (
           <div
@@ -351,7 +350,7 @@ useEffect(() => {
         </div>
       </section>
 
-      <DirectorioConsejeros />
+      
         {/* Botón flotante "Subir arriba" */}
 {showScroll && (
   <button

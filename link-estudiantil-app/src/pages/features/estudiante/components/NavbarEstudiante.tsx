@@ -7,7 +7,7 @@ export default function StudentNav() {
     { to: "/eventos", label: "Actividades" },
     { to: "/fondos", label: "Fondos" },
     { to: "/requerimiento", label: "Requerimientos" },
-    { to: "/mis-eventos", label: "Inscripciones" },
+    { to: "/mis-inscripciones", label: "Inscripciones" },
     
   ]
 

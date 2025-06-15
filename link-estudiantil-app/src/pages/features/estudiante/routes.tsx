@@ -17,8 +17,8 @@ export function EstudianteRoutes() {
       <Route path="/requerimiento" element={<EnviarRequerimiento />} />
       <Route path="/actividad/:id" element={<ActividadDetalle />} />
       <Route path="/fondos" element={<Fondos />} />
-      <Route path="/eventos" element={<Actividades />} />
-      <Route path="/mis-eventos" element={<MisInscripciones />} />
+      <Route path="/actividades" element={<Actividades />} />
+      <Route path="/mis-inscripciones" element={<MisInscripciones />} />
       <Route path="/notificaciones" element={<Notificaciones/>} />
     </Routes>
   );

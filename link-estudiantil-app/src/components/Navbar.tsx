@@ -56,23 +56,8 @@ export default function Navbar() {
   const botones = {
     estudiante: [
       
-      { label: `Notificaciones (${notificaciones})`, path: "/notificaciones" },
-    ],
-    consejero: [
-      { label: "Inicio", path: "/consejero" },
-      { label: "Requerimientos Recibidos", path: "/requerimientos-recibidos" },
-      { label: "Crear Propuesta", path: "/crear-propuesta" },
-      { label: "Mis Propuestas", path: "/mis-propuestas" },
-      { label: `Notificaciones (${notificaciones})`, path: "/notificaciones" },
-    ],
-    coordinador: [
-      { label: "Inicio", path: "/coordinador" },
-      { label: "Ver Propuestas", path: "/ver-propuestas" },
-      { label: "Aprobar Propuestas", path: "/aprobar-propuestas" },
-      { label: "Crear Actividad", path: "/crear-actividad" },
-      { label: "Consejeros y Actividades", path: "/listar-consejeros" },
-      { label: `Notificaciones (${notificaciones})`, path: "/notificaciones" },
-    ],
+      { label: `Notificaciones (${notificaciones})`, path: "/notificaciones" }
+    ]
   }
 
   return (
@@ -91,7 +76,7 @@ export default function Navbar() {
 
         {/* Menú desplegable */}
         <img
-          src="/avatar.png"
+          src="/vector-male-student-icon.jpg"
           alt="Avatar"
           className="w-8 h-8 rounded-full cursor-pointer"
           onClick={() => setShowMenu(!showMenu)}
@@ -100,9 +85,15 @@ export default function Navbar() {
           <div className="absolute right-0 top-12 w-48 bg-white border rounded shadow text-black z-50">
             <button
               className="w-full px-4 py-2 text-left hover:bg-gray-100"
-              onClick={() => navigate("/perfil")}
+              onClick={() => navigate("/mis-inscripciones")}
             >
-              Perfil
+              Mis inscripciones
+            </button>
+            <button
+              className="w-full px-4 py-2 text-left hover:bg-gray-100"
+              onClick={() => navigate("/requerimiento")}
+            >
+              Requerimientos enviados
             </button>
             <hr />
             <button
