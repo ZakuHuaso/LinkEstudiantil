@@ -59,10 +59,13 @@ export default function ChatPropuestaConsejero() {
         .order("creado_en", { ascending: true });
 
       if (!error && data) {
-        setMensajes(data);
-      } else {
-        console.error("Error cargando mensajes:", error?.message);
-      }
+  setMensajes(data);
+  setTimeout(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, 100);
+} else {
+  console.error("Error cargando mensajes:", error?.message);
+}
     };
 
     fetchMensajes();

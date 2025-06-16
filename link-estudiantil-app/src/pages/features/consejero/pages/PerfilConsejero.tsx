@@ -41,7 +41,7 @@ export default function PerfilConsejero() {
           instagram,
           about,
           fotoperfil,
-          consejeros (
+           consejeros!consejero_id (
             nombre,
             correo
           )
@@ -172,6 +172,7 @@ export default function PerfilConsejero() {
       {/* Selector de foto: solo visible en modo edición */}
       {editMode && (
         <div className="p-6 border-t border-gray-200">
+          <h5>Cambiar foto de perfil</h5>
           <UploadPhoto
             userId={perfil.id}
             onUploadComplete={(url) => setForm({ ...form, fotoperfil: url })}
