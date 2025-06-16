@@ -7,6 +7,7 @@ import Register from "../pages/Registro";
 
 import { EstudianteRoutes } from "../pages/features/estudiante/routes";
 import { ConsejeroRoutes } from "../pages/features/consejero/routes";
+import { CoordinadorRoutes } from "../pages/features/coordinador/routes";
 
 export default function AppRoutes() {
   return (
@@ -21,6 +22,9 @@ export default function AppRoutes() {
 
         {/* Rutas consejero */}
         <Route path="/consejero/*" element={<ConsejeroRoutes />} />
+
+        {/* Rutas coordinador */}
+        <Route path="/coordinador/*" element={<CoordinadorRoutes />} />
 
         {/* Ruta 404 */}
         <Route
