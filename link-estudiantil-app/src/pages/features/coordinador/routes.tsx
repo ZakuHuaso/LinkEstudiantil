@@ -5,6 +5,7 @@ import CoordinadorDashboard from "./pages/CoordinadorDashboard";
 import Actividades from "./pages/Actividades";
 import RevisarPropuestas from "./pages/RevisarPropuestas";
 import HistorialChat from "./pages/HistorialChats";
+import Consejeros from "./pages/Consejeros";
 
 import Chat from "./pages/Chat";
 export function CoordinadorRoutes() {
@@ -13,6 +14,7 @@ export function CoordinadorRoutes() {
       <Route path="/" element={<CoordinadorLayout />}>
         <Route index element={<CoordinadorDashboard />} />
         <Route path="actividades" element={<Actividades />} />
+        <Route path="consejeros" element={<Consejeros />} />
         <Route path="revisar-propuestas" element={<RevisarPropuestas />} />
         <Route path="Historial-chats" element={<HistorialChat />} />
         <Route path="Chats/:id" element={<Chat />} />
