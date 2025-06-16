@@ -55,14 +55,26 @@ export default function Navbar() {
 
   const botones = {
     estudiante: [
-      
       { label: `Notificaciones (${notificaciones})`, path: "/notificaciones" }
     ]
   }
 
   return (
     <nav className="bg-blue-900 text-white py-4 px-6 flex justify-between items-center">
-      <h1 className="text-lg font-semibold">Link Estudiantil DUOC UC</h1>
+      {/* Izquierda: logo DUOC */}
+      <img
+        src="/Logo_DuocUC.svg.png"
+        alt="Logo DUOC"
+        className="w-auto h-10 object-contain"
+      />
+
+      {/* Centro: icono de link + texto centrado */}
+      <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-2">
+        <img src="/link-128.png" alt="Icono Link" className="w-6 h-6" />
+        <h1 className="italic text-xl font-light">Link Estudiantil</h1>
+      </div>
+
+      {/* Derecha: notificaciones y avatar */}
       <div className="flex items-center gap-4 relative">
         {rol && botones[rol as keyof typeof botones].map((btn, i) => (
           <button
@@ -74,7 +86,6 @@ export default function Navbar() {
           </button>
         ))}
 
-        {/* Menú desplegable */}
         <img
           src="/vector-male-student-icon.jpg"
           alt="Avatar"
@@ -94,6 +105,12 @@ export default function Navbar() {
               onClick={() => navigate("/requerimiento")}
             >
               Requerimientos enviados
+            </button>
+            <button
+              className="w-full px-4 py-2 text-left hover:bg-gray-100"
+              onClick={() => navigate("/ver-consejeros")}
+            >
+              Mis consejeros
             </button>
             <hr />
             <button

@@ -9,7 +9,7 @@ import Actividades from "./pages/Actividades";
 import Fondos from "./pages/Fondos";
 import MisInscripciones from "./pages/MisInscripciones";
 import Notificaciones from "../../Notificaciones";
-
+import PerfilConsejeroAlumno from "../../../components/PerfilConsejeroAlumno";
 export function EstudianteRoutes() {
   return (
     <Routes>
@@ -20,6 +20,7 @@ export function EstudianteRoutes() {
       <Route path="/actividades" element={<Actividades />} />
       <Route path="/mis-inscripciones" element={<MisInscripciones />} />
       <Route path="/notificaciones" element={<Notificaciones/>} />
+      <Route path="/ver-consejeros" element={<PerfilConsejeroAlumno/>} />
     </Routes>
   );
 }
