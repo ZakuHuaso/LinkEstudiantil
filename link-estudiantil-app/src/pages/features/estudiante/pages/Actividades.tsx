@@ -20,6 +20,7 @@ export default function Actividades() {
   const [actividades, setActividades] = useState<Actividad[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Obtener todas las actividades
   useEffect(() => {
     const fetchActividades = async () => {
       const { data, error } = await supabase
@@ -39,10 +40,14 @@ export default function Actividades() {
         data.map(async (act) => {
           if (!act.imagen_url) return { ...act, imagen_url: null };
 
-          const afterBucket = act.imagen_url.split(
-            "/object/sign/actividades/"
-          )[1];
-          const pathInBucket = afterBucket.split("?")[0];
+          // Verifica que la URL tenga el formato esperado
+          const parts = act.imagen_url.split("/object/sign/actividades/");
+          if (parts.length < 2) {
+            console.warn("URL inesperada, no se puede firmar:", act.imagen_url);
+            return { ...act, imagen_url: null };
+          }
+
+          const pathInBucket = parts[1].split("?")[0];
 
           try {
             const { data: signedData, error: signErr } = await supabase.storage
@@ -50,8 +55,8 @@ export default function Actividades() {
               .createSignedUrl(pathInBucket, 300);
             if (signErr) throw signErr;
             return { ...act, imagen_url: signedData.signedUrl };
-          } catch {
-            console.error("No pude firmar URL:", act.imagen_url);
+          } catch (err) {
+            console.error("No pude firmar URL:", act.imagen_url, err);
             return { ...act, imagen_url: null };
           }
         })
@@ -82,7 +87,21 @@ export default function Actividades() {
         </h1>
 
         {loading ? (
-          <p className="text-center text-gray-500">Cargando actividades…</p>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {Array(6)
+              .fill(0)
+              .map((_, i) => (
+                <div
+                  key={i}
+                  className="bg-white rounded-lg shadow animate-pulse"
+                >
+                  <div className="w-full h-48 bg-gray-300 mb-4 rounded" />
+                  <div className="h-6 bg-gray-300 mb-2 rounded" />
+                  <div className="h-4 bg-gray-200 mb-2 rounded" />
+                  <div className="h-4 bg-gray-200 mb-2 rounded" />
+                </div>
+              ))}
+          </div>
         ) : actividades.length === 0 ? (
           <p className="text-center text-gray-500">No hay actividades.</p>
         ) : (
@@ -93,6 +112,7 @@ export default function Actividades() {
               </h2>
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {actividadesPorTipo[tipo].map((a) => (
+                  //Navegacion a la actividad elegida, se pasa el id de la actividad
                   <Link
                     key={a.id}
                     to={`/actividad/${a.id}`}

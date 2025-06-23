@@ -49,10 +49,8 @@ export default function RequerimientosPage() {
     .filter((r) => (filtroTipo ? r.tipo === filtroTipo : true))
     .filter((r) => (filtroEstado ? r.estado === filtroEstado : true))
     .filter((r) =>
-  filtroFecha
-    ? r.fecha_envio.slice(0, 10) === filtroFecha
-    : true
-);
+      filtroFecha ? r.fecha_envio.slice(0, 10) === filtroFecha : true
+    );
 
   // Lógica para paginación
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -127,6 +125,7 @@ export default function RequerimientosPage() {
     }
 
     let imagenUrl: string | null = null;
+    //Subida de imagen a el bucket imagenes, carpeta requerimientos
     if (imagen) {
       const fileName = `${user.id}-${Date.now()}`;
       const { error: uploadError } = await supabase.storage
@@ -192,185 +191,210 @@ export default function RequerimientosPage() {
       <main className="max-w-4xl mx-auto py-8 space-y-12">
         {/* Tabla de Mis Requerimientos */}
         <section>
-  <h2 className="text-2xl font-bold text-blue-900 mb-4">
-    Mis Requerimientos
-  </h2>
+          <h2 className="text-2xl font-bold text-blue-900 mb-4">
+            Mis Requerimientos
+          </h2>
 
-  {/* Filtros */}
-  <div className="flex flex-wrap gap-4 mb-4">
-    {/* Tipo */}
-    <div>
-      <label className="block text-sm font-medium mb-1">Filtrar por tipo</label>
-      <select
-        value={filtroTipo}
-        onChange={(e) => {
-          setFiltroTipo(e.target.value);
-          setCurrentPage(1);
-        }}
-        className="border p-2 rounded"
-      >
-        <option value="">Todos</option>
-        <option value="Actividad">Actividad</option>
-        <option value="Sugerencia">Sugerencia</option>
-        <option value="Otro">Otro</option>
-      </select>
-    </div>
+          {/* Filtros */}
+          <div className="flex flex-wrap gap-4 mb-4">
+            {/* Tipo */}
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                Filtrar por tipo
+              </label>
+              <select
+                value={filtroTipo}
+                onChange={(e) => {
+                  setFiltroTipo(e.target.value);
+                  setCurrentPage(1);
+                }}
+                className="border p-2 rounded"
+              >
+                <option value="">Todos</option>
+                <option value="Actividad">Actividad</option>
+                <option value="Sugerencia">Sugerencia</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </div>
 
-    {/* Estado */}
-    <div>
-      <label className="block text-sm font-medium mb-1">Filtrar por estado</label>
-      <select
-        value={filtroEstado}
-        onChange={(e) => {
-          setFiltroEstado(e.target.value);
-          setCurrentPage(1);
-        }}
-        className="border p-2 rounded"
-      >
-        <option value="">Todos</option>
-        <option value="pendiente">Pendiente</option>
-        <option value="respondido">Respondido</option>
-        <option value="aceptado">Aceptado</option>
-        <option value="denegado">Denegado</option>
-      </select>
-    </div>
+            {/* Estado */}
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                Filtrar por estado
+              </label>
+              <select
+                value={filtroEstado}
+                onChange={(e) => {
+                  setFiltroEstado(e.target.value);
+                  setCurrentPage(1);
+                }}
+                className="border p-2 rounded"
+              >
+                <option value="">Todos</option>
+                <option value="pendiente">Pendiente</option>
+                <option value="respondido">Respondido</option>
+                <option value="aceptado">Aceptado</option>
+                <option value="denegado">Denegado</option>
+              </select>
+            </div>
 
-    {/* Fecha */}
-    <div>
-      <label className="block text-sm font-medium mb-1">Filtrar por fecha</label>
-      <input
-        type="date"
-        value={filtroFecha}
-        onChange={(e) => {
-          setFiltroFecha(e.target.value);
-          setCurrentPage(1);
-        }}
-        className="border p-2 rounded"
-      />
-    </div>
-  </div>
+            {/* Fecha */}
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                Filtrar por fecha
+              </label>
+              <input
+                type="date"
+                value={filtroFecha}
+                onChange={(e) => {
+                  setFiltroFecha(e.target.value);
+                  setCurrentPage(1);
+                }}
+                className="border p-2 rounded"
+              />
+            </div>
+          </div>
 
-  {/* Tabla */}
-  {tablaLoading ? (
-    <p className="text-gray-500">Cargando...</p>
-  ) : (
-    <div className="overflow-x-auto">
-      <table className="min-w-full bg-white border border-gray-200 text-sm">
-        <thead className="bg-blue-100 text-left text-gray-700">
-          <tr>
-            <th className="px-4 py-2">Tipo</th>
-            <th className="px-4 py-2">Descripción</th>
-            <th className="px-4 py-2">Fecha</th>
-            <th className="px-4 py-2">Estado</th>
-            <th className="px-4 py-2">Respuesta</th>
-            <th className="px-4 py-2">Imagen</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentItems.length > 0 ? (
-            currentItems.map((r) => (
-              <tr key={r.id} className="border-t hover:bg-gray-50">
-                <td className="px-4 py-2">{r.tipo}</td>
-                <td className="px-4 py-2">{r.descripcion}</td>
-                <td className="px-4 py-2">
-                  {new Date(r.fecha_envio).toLocaleDateString()}
-                </td>
-                <td className="px-4 py-2">
-                  <span
-                    className={`px-2 py-1 rounded-full text-xs ${
-                      r.estado === "respondido" || r.estado === "aceptado"
-                        ? "bg-green-100 text-green-800"
-                        : r.estado === "denegado"
-                        ? "bg-red-100 text-red-800"
-                        : "bg-yellow-100 text-yellow-800"
-                    }`}
-                  >
-                    {r.estado.toUpperCase()}
-                  </span>
-                </td>
-                <td className="px-4 py-2">
-                  {r.respuesta || <span className="text-gray-400">—</span>}
-                </td>
-                <td className="px-4 py-2">
-                  {r.imagen_url ? (
-                    <button
-                      className="text-blue-600 underline"
-                      onClick={() => setImagenSeleccionada(r.imagen_url!)}
-                    >
-                      Ver
-                    </button>
-                  ) : (
-                    "—"
-                  )}
-                </td>
-              </tr>
-            ))
+          {/* Tabla */}
+          {tablaLoading ? (
+            <div className="space-y-2">
+              {Array(3)
+                .fill(0)
+                .map((_, i) => (
+                  <div
+                    key={i}
+                    className="h-12 bg-gray-200 rounded animate-pulse"
+                  />
+                ))}
+            </div>
           ) : (
-            <tr>
-              <td colSpan={6} className="text-center py-4 text-gray-500">
-                No se encontraron requerimientos.
-              </td>
-            </tr>
+            <div className="overflow-x-auto">
+              <table className="min-w-full bg-white border border-gray-200 text-sm">
+                <thead className="bg-blue-100 text-left text-gray-700">
+                  <tr>
+                    <th className="px-4 py-2">Tipo</th>
+                    <th className="px-4 py-2">Descripción</th>
+                    <th className="px-4 py-2">Fecha</th>
+                    <th className="px-4 py-2">Estado</th>
+                    <th className="px-4 py-2">Respuesta</th>
+                    <th className="px-4 py-2">Imagen</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentItems.length > 0 ? (
+                    currentItems.map((r) => (
+                      <tr key={r.id} className="border-t hover:bg-gray-50">
+                        <td className="px-4 py-2">{r.tipo}</td>
+                        <td className="px-4 py-2">{r.descripcion}</td>
+                        <td className="px-4 py-2">
+                          {new Date(r.fecha_envio).toLocaleDateString()}
+                        </td>
+                        <td className="px-4 py-2">
+                          <span
+                            className={`px-2 py-1 rounded-full text-xs ${
+                              r.estado === "respondido" ||
+                              r.estado === "aceptado"
+                                ? "bg-green-100 text-green-800"
+                                : r.estado === "denegado"
+                                ? "bg-red-100 text-red-800"
+                                : "bg-yellow-100 text-yellow-800"
+                            }`}
+                          >
+                            {r.estado.toUpperCase()}
+                          </span>
+                        </td>
+                        <td className="px-4 py-2">
+                          {r.respuesta || (
+                            <span className="text-gray-400">—</span>
+                          )}
+                        </td>
+                        <td className="px-4 py-2">
+                          {r.imagen_url ? (
+                            <button
+                              className="text-blue-600 underline"
+                              onClick={() =>
+                                setImagenSeleccionada(r.imagen_url!)
+                              }
+                            >
+                              Ver
+                            </button>
+                          ) : (
+                            "—"
+                          )}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan={6}
+                        className="text-center py-4 text-gray-500"
+                      >
+                        No se encontraron requerimientos.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           )}
-        </tbody>
-      </table>
-    </div>
-  )}
 
-  {/* Paginación */}
-  {totalPages > 1 && (
-    <div className="flex justify-center mt-6 space-x-2">
-      <button
-        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-        disabled={currentPage === 1}
-        className="px-3 py-1 border rounded disabled:opacity-50"
-      >
-        &lt;
-      </button>
+          {/* Paginación */}
+          {totalPages > 1 && (
+            <div className="flex justify-center mt-6 space-x-2">
+              <button
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="px-3 py-1 border rounded disabled:opacity-50"
+              >
+                &lt;
+              </button>
 
-      {Array.from({ length: totalPages }, (_, i) => (
-        <button
-          key={i + 1}
-          onClick={() => setCurrentPage(i + 1)}
-          className={`px-3 py-1 border rounded ${
-            currentPage === i + 1 ? "bg-blue-500 text-white" : ""
-          }`}
-        >
-          {i + 1}
-        </button>
-      ))}
+              {Array.from({ length: totalPages }, (_, i) => (
+                <button
+                  key={i + 1}
+                  onClick={() => setCurrentPage(i + 1)}
+                  className={`px-3 py-1 border rounded ${
+                    currentPage === i + 1 ? "bg-blue-500 text-white" : ""
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
 
-      <button
-        onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-        disabled={currentPage === totalPages}
-        className="px-3 py-1 border rounded disabled:opacity-50"
-      >
-        &gt;
-      </button>
-    </div>
-  )}
+              <button
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+                className="px-3 py-1 border rounded disabled:opacity-50"
+              >
+                &gt;
+              </button>
+            </div>
+          )}
 
-  {/* Modal imagen */}
-  {imagenSeleccionada && (
-    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-      <div className="bg-white p-4 rounded shadow-lg max-w-md w-full">
-        <img
-          src={imagenSeleccionada}
-          alt="Preview"
-          className="w-full h-auto rounded"
-        />
-        <div className="text-right mt-4">
-          <button
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-            onClick={() => setImagenSeleccionada(null)}
-          >
-            Cerrar
-          </button>
-        </div>
-      </div>
-    </div>
-  )}
-</section>
+          {/* Modal imagen */}
+          {imagenSeleccionada && (
+            <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+              <div className="bg-white p-4 rounded shadow-lg max-w-md w-full">
+                <img
+                  src={imagenSeleccionada}
+                  alt="Preview"
+                  className="w-full h-auto rounded"
+                />
+                <div className="text-right mt-4">
+                  <button
+                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                    onClick={() => setImagenSeleccionada(null)}
+                  >
+                    Cerrar
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </section>
 
         {/* Formulario de Envío */}
         <section className="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition">

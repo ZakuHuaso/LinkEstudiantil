@@ -16,7 +16,6 @@ import {
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 
-import DirectorioConsejeros from "../../../../components/DirectorioConsejeros";
 
 const heroSlides = [
   {
@@ -33,11 +32,13 @@ const heroSlides = [
   {
     imagen: "/slide3.jpg",
     titulo: "Sé Parte del Cambio",
-    texto: "Envía tus propuestas y transforma tu experiencia estudiantil.",
+    texto: "Envía tus propuestas a tu consejero y transforma tu experiencia estudiantil.",
   },
 ];
 
 export default function Home() {
+
+  const [loading, setLoading] = useState(true);
   const [actividades, setActividades] = useState<any[]>([]);
   const [eventos, setEventos] = useState<any[]>([]);
   const [filtroTipo, setFiltroTipo] = useState("");
@@ -89,7 +90,7 @@ const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
 
-  // 🎈 1️⃣ Para actividades destacadas
+  // Para actividades destacadas
 useEffect(() => {
   const fetchDestacadas = async () => {
     const { data, error } = await supabase
@@ -104,12 +105,13 @@ useEffect(() => {
     if (!error && data) {
       setActividades(data);
     }
+     setLoading(false); // termina la carga
   };
 
   fetchDestacadas();
 }, []);
 
-// 🎈 2️⃣ Para eventos del calendario (TODAS las actividades)
+// Para eventos del calendario (TODAS las actividades)
 useEffect(() => {
   const fetchEventos = async () => {
     const { data, error } = await supabase
@@ -164,7 +166,7 @@ useEffect(() => {
                   </h1>
                   <p className="text-lg md:text-xl mb-6">{slide.texto}</p>
                   <button
-                    onClick={() => navigate("/eventos")}
+                    onClick={() => navigate("/actividades")}
                     className="bg-pink-600 hover:bg-pink-700 px-6 py-3 rounded text-white font-semibold"
                   >
                     Ver Actividades
@@ -183,7 +185,7 @@ useEffect(() => {
             titulo: "Actividades",
             desc: "Participa en eventos aprobados",
             icon: <CalendarCheck className="mx-auto w-8 h-8 text-blue-700" />,
-            link: "/eventos",
+            link: "/actividades",
           },
           {
             titulo: "Fondos",
@@ -201,7 +203,7 @@ useEffect(() => {
             titulo: "Inscripciones",
             desc: "Gestiona tus actividades inscritas",
             icon: <CheckCircle className="mx-auto w-8 h-8 text-green-600" />,
-            link: "/mis-eventos",
+            link: "/mis-inscripciones",
           },
         ].map((item, i) => (
           <div
@@ -256,27 +258,42 @@ useEffect(() => {
               Actividades destacadas
             </h3>
             <div className="grid gap-6">
-              {actividades.length > 0 ? (
-                actividades.map((a) => (
-                  <div
-                    key={a.id}
-                    onClick={() => navigate(`/actividad/${a.id}`)}
-                    className="bg-white shadow rounded-lg p-4 hover:shadow-md hover:scale-[1.02] transition-transform cursor-pointer"
-                  >
-                    <h4 className="text-lg font-bold text-blue-800 mb-1">
-                      {a.titulo}
-                    </h4>
-                    <p className="text-sm text-gray-600 mb-2 line-clamp-3">
-                      {a.descripcion}
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      Fecha: {new Date(a.fecha).toLocaleDateString()}
-                    </p>
-                  </div>
-                ))
-              ) : (
-                <p className="text-gray-500">No hay actividades destacadas.</p>
-              )}
+              {loading ? (
+  // ✅ SKELETON
+  <div className="grid gap-6">
+    {Array(3).fill(0).map((_, i) => (
+      <div key={i} className="bg-white shadow rounded-lg p-4 animate-pulse">
+        <div className="h-6 bg-gray-300 mb-2 rounded" />
+        <div className="h-4 bg-gray-200 mb-2 rounded" />
+        <div className="h-4 bg-gray-200 mb-2 rounded" />
+      </div>
+    ))}
+  </div>
+) : actividades.length > 0 ? (
+  // ✅ MOSTRAR ACTIVIDADES
+  <div className="grid gap-6">
+    {actividades.map((a) => (
+      <div
+        key={a.id}
+        onClick={() => navigate(`/actividad/${a.id}`)}
+        className="bg-white shadow rounded-lg p-4 hover:shadow-md hover:scale-[1.02] transition-transform cursor-pointer"
+      >
+        <h4 className="text-lg font-bold text-blue-800 mb-1">
+          {a.titulo}
+        </h4>
+        <p className="text-sm text-gray-600 mb-2 line-clamp-3">
+          {a.descripcion}
+        </p>
+        <p className="text-sm text-gray-500">
+          Fecha: {new Date(a.fecha).toLocaleDateString()}
+        </p>
+      </div>
+    ))}
+  </div>
+) : (
+  // ✅ NO HAY ACTIVIDADES
+  <p className="text-gray-500">No hay actividades destacadas.</p>
+)}
             </div>
           </div>
 
@@ -333,7 +350,7 @@ useEffect(() => {
         </div>
       </section>
 
-      <DirectorioConsejeros />
+      
         {/* Botón flotante "Subir arriba" */}
 {showScroll && (
   <button
